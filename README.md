@@ -76,14 +76,16 @@ El sistema obtendrá los datos desde la base de datos corporativa (motor Oracle)
 
 ## 💰 Análisis de Costos Operativos
 
-### Costos de Desarrollo (Estimado 3-4 meses)
+### Costos de Desarrollo (Estimado 4-6 semanas con asistencia técnica)
 
-| Rol | Salario Mensual (USD) | Duración | Total |
-|-----|----------------------|----------|-------|
-| Desarrollador Senior Full-Stack | $8,000 - $12,000 | 4 meses | $32,000 - $48,000 |
-| Desarrollador Frontend | $6,000 - $8,000 | 3 meses | $18,000 - $24,000 |
-| Desarrollador Backend | $6,000 - $8,000 | 3 meses | $18,000 - $24,000 |
-| **Total Desarrollo** | | | **$68,000 - $96,000** |
+| Rol | Horas Estimadas | Tarifa por Hora (COP) | Total (COP) |
+|-----|----------------|----------------------|-------------|
+| Desarrollador Senior Full-Stack | 120 horas | $28,000 | $3,360,000 |
+| Desarrollador Frontend | 80 horas | $28,000 | $2,240,000 |
+| Desarrollador Backend | 80 horas | $28,000 | $2,240,000 |
+| **Total Desarrollo** | **280 horas** | | **$7,840,000** |
+
+**Nota**: El tiempo estimado considera desarrollo acelerado con metodologías ágiles y herramientas de productividad avanzadas.
 
 ### Costos de Infraestructura Mensual
 
@@ -107,14 +109,15 @@ El sistema obtendrá los datos desde la base de datos corporativa (motor Oracle)
 
 ### Resumen de Costos
 
-- **Desarrollo inicial**: $68,000 - $96,000 USD
+- **Desarrollo inicial**: $7,840,000 COP (280 horas)
 - **Operación mensual**: $90 - $320 USD
 - **Mantenimiento anual**: $10,000 - $28,000 USD
 - **ROI estimado**: 6-12 meses (dependiendo del ahorro energético generado)
+- **Tiempo de entrega**: 4-6 semanas con metodología de desarrollo acelerado
 
 ## 📅 Plan de Implementación
 
-### Fase 1: Fundación (Mes 1)
+### Fase 1: Fundación (Semana 1-2)
 - [ ] Configuración del entorno de desarrollo
 - [ ] Estructura del proyecto y configuración de herramientas
 - [ ] Conexión con base de datos Oracle
@@ -123,7 +126,7 @@ El sistema obtendrá los datos desde la base de datos corporativa (motor Oracle)
 
 **Entregables**: Prototipo funcional con conexión a base de datos
 
-### Fase 2: Funcionalidades Core (Mes 2)
+### Fase 2: Funcionalidades Core (Semana 3-4)
 - [ ] Implementación de métricas energéticas principales
 - [ ] Gráficos en tiempo real para consumo/generación
 - [ ] Sistema de alertas básico para valores anómalos
@@ -132,7 +135,7 @@ El sistema obtendrá los datos desde la base de datos corporativa (motor Oracle)
 
 **Entregables**: Dashboard funcional con métricas principales
 
-### Fase 3: Optimización (Mes 3)
+### Fase 3: Optimización (Semana 5-6)
 - [ ] Implementación de caché y optimización de consultas
 - [ ] Sistema de notificaciones push y email
 - [ ] Reportes históricos y exportación de datos
@@ -141,7 +144,7 @@ El sistema obtendrá los datos desde la base de datos corporativa (motor Oracle)
 
 **Entregables**: Sistema optimizado y probado
 
-### Fase 4: Despliegue (Mes 4)
+### Fase 4: Despliegue (Semana 6)
 - [ ] Configuración de entorno de producción
 - [ ] Monitoreo, logging y alertas de sistema
 - [ ] Documentación de usuario y administrador
@@ -212,11 +215,24 @@ El sistema obtendrá los datos desde la base de datos corporativa (motor Oracle)
 ## 🤝 Próximos Pasos
 
 1. **Revisión de requerimientos**: Validación detallada con stakeholders
-2. **Aprobación del presupuesto**: Confirmación de recursos disponibles
+2. **Aprobación del presupuesto**: Confirmación de recursos disponibles ($7,840,000 COP)
 3. **Inicio del proyecto**: Kick-off y configuración del equipo
-4. **Desarrollo iterativo**: Sprints de 2 semanas con demos regulares
+4. **Desarrollo iterativo**: Sprints semanales con demos regulares
 5. **Testing y validación**: Pruebas con usuarios finales
 6. **Despliegue gradual**: Rollout por fases para minimizar riesgos
+
+## ⏱️ Cronograma Detallado
+
+| Semana | Actividades Principales | Horas Estimadas | Entregables |
+|--------|------------------------|-----------------|-------------|
+| 1 | Setup del proyecto, conexión Oracle, API básica | 40 horas | Entorno de desarrollo funcional |
+| 2 | Dashboard básico, autenticación, navegación | 40 horas | Prototipo navegable |
+| 3 | Métricas energéticas, gráficos básicos | 40 horas | Dashboard con datos reales |
+| 4 | Sistema de alertas, responsividad móvil | 40 horas | MVP funcional completo |
+| 5 | Optimización, caché, notificaciones | 40 horas | Sistema optimizado |
+| 6 | Testing, despliegue, documentación | 40 horas | Sistema en producción |
+
+**Total del proyecto**: 6 semanas (240 horas efectivas + 40 horas de buffer)
 
 ---
 
