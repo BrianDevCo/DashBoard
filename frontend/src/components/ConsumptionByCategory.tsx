@@ -167,12 +167,12 @@ const ConsumptionByCategory: React.FC<ConsumptionByCategoryProps> = ({
     return `${value.toFixed(1)}%`;
   };
 
-  const filteredData = data.filter(item => {
+  const filteredData = (data as any[] || []).filter((item: any) => {
     const searchFields = type === 'site' 
-      ? [(item as any).siteName, (item as any).location]
+      ? [item.siteName, item.location]
       : type === 'client'
-      ? [(item as any).clientName]
-      : [(item as any).groupName, (item as any).description];
+      ? [item.clientName]
+      : [item.groupName, item.description];
     
     return searchFields.some(field => 
       field?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -196,21 +196,21 @@ const ConsumptionByCategory: React.FC<ConsumptionByCategoryProps> = ({
   );
 
   const getTotalConsumption = () => {
-    return data.reduce((sum, item) => sum + item.totalConsumption, 0);
+    return (data as any[] || []).reduce((sum: number, item: any) => sum + (item.totalConsumption || 0), 0);
   };
 
   const getTotalCost = () => {
-    return data.reduce((sum, item) => sum + (item as any).cost, 0);
+    return (data as any[] || []).reduce((sum: number, item: any) => sum + (item.cost || 0), 0);
   };
 
   const getAverageEfficiency = () => {
-    if (data.length === 0) return 0;
-    return data.reduce((sum, item) => sum + item.efficiency, 0) / data.length;
+    if ((data as any[] || []).length === 0) return 0;
+    return (data as any[] || []).reduce((sum: number, item: any) => sum + (item.efficiency || 0), 0) / (data as any[] || []).length;
   };
 
   const getAveragePowerFactor = () => {
-    if (data.length === 0) return 0;
-    return data.reduce((sum, item) => sum + (item as any).powerFactor, 0) / data.length;
+    if ((data as any[] || []).length === 0) return 0;
+    return (data as any[] || []).reduce((sum: number, item: any) => sum + (item.powerFactor || 0), 0) / (data as any[] || []).length;
   };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>, id: string) => {

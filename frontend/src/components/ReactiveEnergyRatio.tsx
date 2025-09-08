@@ -176,7 +176,7 @@ const ReactiveEnergyRatio: React.FC<ReactiveEnergyRatioProps> = ({
     });
   };
 
-  const filteredData = data.filter(item =>
+  const filteredData = (data as any[] || []).filter((item: any) =>
     item.siteName.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
