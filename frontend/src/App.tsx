@@ -19,11 +19,8 @@ import Settings from './pages/Settings';
 import { useAuth } from './hooks/useAuth';
 
 function App() {
-  const { isAuthenticated } = useAuth();
-
-  if (!isAuthenticated) {
-    return <Login />;
-  }
+  // Para demo, siempre autenticado
+  const isAuthenticated = true;
 
   return (
     <Box sx={{ display: 'flex' }}>

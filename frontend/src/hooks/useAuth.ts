@@ -12,23 +12,25 @@ export const useAuth = () => {
     try {
       dispatch(loginStart());
       
-      // Aquí iría la llamada real a la API
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Credenciales inválidas');
+      // Simulación de autenticación para demo
+      if (username === 'admin' && password === 'admin123') {
+        const mockUser = {
+          id: '1',
+          username: 'admin',
+          email: 'admin@cgm.com',
+          role: 'admin' as const,
+          permissions: ['read', 'write', 'admin'],
+          name: 'Administrador',
+          avatar: null
+        };
+        
+        const mockToken = 'demo-token-123';
+        
+        dispatch(loginSuccess({ user: mockUser, token: mockToken }));
+        return { success: true };
+      } else {
+        throw new Error('Credenciales inválidas. Usa: admin / admin123');
       }
-
-      const data = await response.json();
-      dispatch(loginSuccess(data));
-      
-      return { success: true };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Error de autenticación';
       dispatch(loginFailure(errorMessage));
