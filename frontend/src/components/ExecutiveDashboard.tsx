@@ -246,13 +246,13 @@ const ExecutiveDashboard: React.FC = () => {
 
   const getStats = () => {
     return {
-      totalKPIs: kpis.length,
-      totalAlerts: alerts.length,
-      activeAlerts: alerts.filter(a => a.status === 'active').length,
-      criticalAlerts: alerts.filter(a => a.severity === 'critical').length,
-      totalInsights: insights.length,
-      highPriorityInsights: insights.filter(i => i.priority === 'high' || i.priority === 'urgent').length,
-      totalTrends: trends.length,
+      totalKPIs: kpisData.length,
+      totalAlerts: alertsData.length,
+      activeAlerts: alertsData.filter(a => a.severity === 'high').length,
+      criticalAlerts: alertsData.filter(a => a.severity === 'high').length,
+      totalInsights: insightsData.length,
+      highPriorityInsights: insightsData.filter(i => i.trend === 'up').length,
+      totalTrends: trendsData.length,
     };
   };
 
@@ -520,7 +520,7 @@ const ExecutiveDashboard: React.FC = () => {
 
       {/* KPIs principales */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
-        {kpis.map((kpi) => (
+        {kpisData.map((kpi) => (
           <Grid item xs={12} sm={6} md={4} lg={2} key={kpi.id}>
             <Card sx={{ height: '100%' }}>
               <CardContent>
@@ -560,7 +560,7 @@ const ExecutiveDashboard: React.FC = () => {
       </Grid>
 
       {/* Alertas destacadas */}
-      {showAlerts && alerts.length > 0 && (
+      {showAlerts && alertsData.length > 0 && (
         <Card sx={{ mb: 3 }}>
           <CardHeader
             title="Alertas Destacadas"
@@ -572,11 +572,11 @@ const ExecutiveDashboard: React.FC = () => {
           />
           <CardContent>
             <Grid container spacing={2}>
-              {alerts.slice(0, 6).map((alert) => (
+              {alertsData.slice(0, 6).map((alert) => (
                 <Grid item xs={12} sm={6} md={4} key={alert.id}>
                   <Alert
                     severity={EXECUTIVE_UTILS.getSeverityColor(alert.severity) as any}
-                    icon={getAlertIcon(alert.type)}
+                    icon={getAlertIcon('energy')}
                     action={
                       <Button
                         color="inherit"
@@ -589,10 +589,10 @@ const ExecutiveDashboard: React.FC = () => {
                       </Button>
                     }
                   >
-                    <AlertTitle>{alert.title}</AlertTitle>
+                    <AlertTitle>Alerta del Sistema</AlertTitle>
                     {alert.message}
                     <Typography variant="caption" display="block">
-                      {alert.entityName} • {EXECUTIVE_UTILS.getRelativeTime(alert.createdAt)}
+                      Tiempo: {alert.time}
                     </Typography>
                   </Alert>
                 </Grid>
@@ -603,7 +603,7 @@ const ExecutiveDashboard: React.FC = () => {
       )}
 
       {/* Insights destacados */}
-      {showInsights && insights.length > 0 && (
+      {showInsights && insightsData.length > 0 && (
         <Card sx={{ mb: 3 }}>
           <CardHeader
             title="Insights y Recomendaciones"
@@ -615,36 +615,32 @@ const ExecutiveDashboard: React.FC = () => {
           />
           <CardContent>
             <Grid container spacing={2}>
-              {insights.slice(0, 6).map((insight) => (
+              {insightsData.slice(0, 6).map((insight) => (
                 <Grid item xs={12} sm={6} md={4} key={insight.id}>
                   <Card variant="outlined">
                     <CardContent>
                       <Box display="flex" alignItems="center" gap={1} mb={2}>
-                        <Avatar sx={{ bgcolor: getInsightColor(insight.type), width: 32, height: 32 }}>
-                          {getInsightIcon(insight.type)}
+                        <Avatar sx={{ bgcolor: getInsightColor('efficiency'), width: 32, height: 32 }}>
+                          {getInsightIcon('efficiency')}
                         </Avatar>
                         <Typography variant="h6" noWrap>
-                          {insight.title}
+                          {insight.name}
                         </Typography>
                         <Chip
-                          label={EXECUTIVE_UTILS.getPriorityIcon(insight.priority)}
-                          color={EXECUTIVE_UTILS.getPriorityColor(insight.priority) as any}
+                          label="📈"
+                          color="primary"
                           size="small"
                         />
                       </Box>
                       <Typography variant="body2" color="text.secondary" gutterBottom>
-                        {insight.description}
+                        Consumo: {insight.consumption.toLocaleString()} kWh | Eficiencia: {insight.efficiency}%
                       </Typography>
-                      {insight.recommendation && (
-                        <Typography variant="caption" color="primary">
-                          {insight.recommendation}
-                        </Typography>
-                      )}
-                      {insight.estimatedSavings && (
-                        <Typography variant="caption" color="success.main" display="block">
-                          Ahorro estimado: {EXECUTIVE_UTILS.formatValue(insight.estimatedSavings, insight.currency || 'COP')}
-                        </Typography>
-                      )}
+                      <Typography variant="caption" color="primary">
+                        Tendencia: {insight.trend === 'up' ? '📈' : insight.trend === 'down' ? '📉' : '➡️'}
+                      </Typography>
+                      <Typography variant="caption" color="success.main" display="block">
+                        Ahorro estimado: ${(insight.consumption * 0.1).toLocaleString()} COP
+                      </Typography>
                     </CardContent>
                   </Card>
                 </Grid>
@@ -655,7 +651,7 @@ const ExecutiveDashboard: React.FC = () => {
       )}
 
       {/* Tendencias principales */}
-      {showTrends && trends.length > 0 && (
+      {showTrends && trendsData.length > 0 && (
         <Card sx={{ mb: 3 }}>
           <CardHeader
             title="Tendencias Principales"
@@ -667,40 +663,31 @@ const ExecutiveDashboard: React.FC = () => {
           />
           <CardContent>
             <Grid container spacing={3}>
-              {trends.slice(0, 4).map((trend) => (
+              {trendsData.slice(0, 4).map((trend) => (
                 <Grid item xs={12} sm={6} md={3} key={trend.id}>
                   <Card variant="outlined">
                     <CardContent>
                       <Typography variant="h6" gutterBottom>
-                        {trend.title}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" gutterBottom>
                         {trend.period}
                       </Typography>
-                      {trend.comparison && (
-                        <Box display="flex" alignItems="center" gap={1}>
-                          <Typography variant="body2">
-                            {EXECUTIVE_UTILS.formatChange(trend.comparison.change)}
-                          </Typography>
-                          <Chip
-                            label={EXECUTIVE_UTILS.getChangeIcon(trend.comparison.changeType)}
-                            size="small"
-                            color={EXECUTIVE_UTILS.getChangeColor(trend.comparison.change, trend.comparison.changeType) as any}
-                          />
-                        </Box>
-                      )}
-                      {trend.insights && trend.insights.length > 0 && (
-                        <Box mt={2}>
-                          <Typography variant="caption" color="text.secondary">
-                            Insights:
-                          </Typography>
-                          {trend.insights.slice(0, 2).map((insight, index) => (
-                            <Typography key={index} variant="caption" display="block">
-                              • {insight.description}
-                            </Typography>
-                          ))}
-                        </Box>
-                      )}
+                      <Typography variant="body2" color="text.secondary" gutterBottom>
+                        Eficiencia: {trend.efficiency}%
+                      </Typography>
+                      <Box display="flex" alignItems="center" gap={1}>
+                        <Typography variant="body2">
+                          Consumo: {trend.consumption.toLocaleString()} kWh
+                        </Typography>
+                        <Chip
+                          label="📈"
+                          size="small"
+                          color="primary"
+                        />
+                      </Box>
+                      <Box mt={2}>
+                        <Typography variant="caption" color="text.secondary">
+                          Período: {trend.period}
+                        </Typography>
+                      </Box>
                     </CardContent>
                   </Card>
                 </Grid>

@@ -11,23 +11,23 @@ export const mockExecutiveData = {
     avgDemand: 2600
   },
   trends: [
-    { period: 'Enero', consumption: 1200000, cost: 72000000, efficiency: 85.2 },
-    { period: 'Febrero', consumption: 1150000, cost: 69000000, efficiency: 86.8 },
-    { period: 'Marzo', consumption: 1300000, cost: 78000000, efficiency: 88.1 },
-    { period: 'Abril', consumption: 1250000, cost: 75000000, efficiency: 87.5 },
-    { period: 'Mayo', consumption: 1350000, cost: 81000000, efficiency: 89.2 },
-    { period: 'Junio', consumption: 1400000, cost: 84000000, efficiency: 90.1 }
+    { id: '1', period: 'Enero', consumption: 1200000, cost: 72000000, efficiency: 85.2 },
+    { id: '2', period: 'Febrero', consumption: 1150000, cost: 69000000, efficiency: 86.8 },
+    { id: '3', period: 'Marzo', consumption: 1300000, cost: 78000000, efficiency: 88.1 },
+    { id: '4', period: 'Abril', consumption: 1250000, cost: 75000000, efficiency: 87.5 },
+    { id: '5', period: 'Mayo', consumption: 1350000, cost: 81000000, efficiency: 89.2 },
+    { id: '6', period: 'Junio', consumption: 1400000, cost: 84000000, efficiency: 90.1 }
   ],
   topConsumers: [
-    { name: 'Planta Industrial Norte', consumption: 450000, efficiency: 92.3, trend: 'up' },
-    { name: 'Oficinas Centrales', consumption: 320000, efficiency: 88.7, trend: 'down' },
-    { name: 'Centro de Datos', consumption: 280000, efficiency: 85.4, trend: 'stable' },
-    { name: 'Almacén Principal', consumption: 200000, efficiency: 82.1, trend: 'up' }
+    { id: '1', name: 'Planta Industrial Norte', consumption: 450000, efficiency: 92.3, trend: 'up' },
+    { id: '2', name: 'Oficinas Centrales', consumption: 320000, efficiency: 88.7, trend: 'down' },
+    { id: '3', name: 'Centro de Datos', consumption: 280000, efficiency: 85.4, trend: 'stable' },
+    { id: '4', name: 'Almacén Principal', consumption: 200000, efficiency: 82.1, trend: 'up' }
   ],
   alerts: [
-    { id: 1, severity: 'high', message: 'Pico de demanda excedido en Planta Norte', time: '14:30' },
-    { id: 2, severity: 'medium', message: 'Factor de potencia bajo en Centro de Datos', time: '10:15' },
-    { id: 3, severity: 'low', message: 'Mantenimiento programado completado', time: '08:00' }
+    { id: '1', severity: 'high', message: 'Pico de demanda excedido en Planta Norte', time: '14:30' },
+    { id: '2', severity: 'medium', message: 'Factor de potencia bajo en Centro de Datos', time: '10:15' },
+    { id: '3', severity: 'low', message: 'Mantenimiento programado completado', time: '08:00' }
   ],
   kpis: [
     { id: '1', title: 'Consumo Total', value: 1250000, unit: 'kWh', change: 5.2, changeType: 'increase' as const, trend: 'up' as const, period: 'mes', target: 1200000, status: 'warning' as const, icon: '⚡', color: '#2196f3', description: 'Consumo total de energía activa', lastUpdated: '2024-01-15T10:30:00Z' },
