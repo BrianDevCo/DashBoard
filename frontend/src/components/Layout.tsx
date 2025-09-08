@@ -89,7 +89,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           zIndex: (theme) => theme.zIndex.drawer + 1,
         }}
       >
-        <Toolbar>
+        <Toolbar sx={{ minHeight: { xs: 56, sm: 64 } }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -100,25 +100,58 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <MenuIcon />
           </IconButton>
           
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
+          <Typography 
+            variant="h6" 
+            noWrap 
+            component="div" 
+            sx={{ 
+              flexGrow: 1,
+              fontSize: { xs: '1rem', sm: '1.25rem' },
+              display: { xs: 'none', sm: 'block' }
+            }}
+          >
             Sistema de Monitoreo Energético
           </Typography>
 
-          <Box sx={{ flexGrow: 1, maxWidth: 400, mx: 2 }}>
+          <Typography 
+            variant="h6" 
+            noWrap 
+            component="div" 
+            sx={{ 
+              flexGrow: 1,
+              fontSize: '0.9rem',
+              display: { xs: 'block', sm: 'none' }
+            }}
+          >
+            S.M.E.
+          </Typography>
+
+          <Box sx={{ 
+            flexGrow: 1, 
+            maxWidth: { xs: 200, sm: 400 }, 
+            mx: { xs: 1, sm: 2 },
+            display: { xs: 'none', md: 'block' }
+          }}>
             <GlobalSearch />
           </Box>
 
-          <IconButton color="inherit" onClick={() => dispatch(toggleTheme())}>
-            {appTheme === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
-          </IconButton>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.5, sm: 1 } }}>
+            <IconButton 
+              color="inherit" 
+              onClick={() => dispatch(toggleTheme())}
+              size="small"
+            >
+              {appTheme === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+            </IconButton>
 
-          <IconButton color="inherit">
-            <NotificationsIcon />
-          </IconButton>
+            <IconButton color="inherit" size="small">
+              <NotificationsIcon />
+            </IconButton>
 
-          <IconButton color="inherit" onClick={handleLogout}>
-            <AccountIcon />
-          </IconButton>
+            <IconButton color="inherit" onClick={handleLogout} size="small">
+              <AccountIcon />
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
 
@@ -158,10 +191,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
+          p: { xs: 1, sm: 2, md: 3 },
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          mt: 10, // Aumentar el margin-top para evitar superposición
+          mt: { xs: 7, sm: 8, md: 10 }, // Responsive margin-top
           minHeight: '100vh',
+          overflow: 'auto',
         }}
       >
         {children}
@@ -171,32 +205,67 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   function SidebarContent() {
     return (
-      <Box>
-        <Toolbar>
-          <Typography variant="h6" noWrap component="div">
+      <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <Toolbar sx={{ minHeight: { xs: 56, sm: 64 } }}>
+          <Typography 
+            variant="h6" 
+            noWrap 
+            component="div"
+            sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
+          >
             Dashboard Energético
           </Typography>
         </Toolbar>
         <Divider />
-        <List>
+        <List sx={{ flexGrow: 1, overflow: 'auto' }}>
           {menuItems.map((item) => (
             <ListItem key={item.text} disablePadding>
               <ListItemButton
                 selected={location.pathname === item.path}
-                onClick={() => handleNavigation(item.path)}
+                onClick={() => {
+                  handleNavigation(item.path);
+                  // Cerrar sidebar en móviles después de navegar
+                  if (window.innerWidth < 600) {
+                    dispatch(toggleSidebar());
+                  }
+                }}
+                sx={{
+                  py: { xs: 1, sm: 1.5 },
+                  '&.Mui-selected': {
+                    backgroundColor: 'primary.light',
+                    '&:hover': {
+                      backgroundColor: 'primary.main',
+                    },
+                  },
+                }}
               >
-                <ListItemIcon>{item.icon}</ListItemIcon>
-                <ListItemText primary={item.text} />
+                <ListItemIcon sx={{ minWidth: { xs: 40, sm: 56 } }}>
+                  {item.icon}
+                </ListItemIcon>
+                <ListItemText 
+                  primary={item.text}
+                  primaryTypographyProps={{
+                    fontSize: { xs: '0.875rem', sm: '1rem' }
+                  }}
+                />
               </ListItemButton>
             </ListItem>
           ))}
         </List>
         <Divider />
-        <Box sx={{ p: 2 }}>
-          <Typography variant="body2" color="text.secondary">
+        <Box sx={{ p: { xs: 1, sm: 2 }, flexShrink: 0 }}>
+          <Typography 
+            variant="body2" 
+            color="text.secondary"
+            sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+          >
             Usuario: {user?.username}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography 
+            variant="body2" 
+            color="text.secondary"
+            sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+          >
             Rol: {user?.role}
           </Typography>
         </Box>

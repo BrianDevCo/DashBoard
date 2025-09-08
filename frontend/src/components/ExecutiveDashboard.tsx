@@ -267,12 +267,34 @@ const ExecutiveDashboard: React.FC = () => {
       {/* Controles */}
       <Card sx={{ mb: 3 }}>
         <CardContent>
-          <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-            <Typography variant="h6">
+          <Box 
+            display="flex" 
+            justifyContent="space-between" 
+            alignItems={{ xs: 'flex-start', sm: 'center' }} 
+            mb={2}
+            flexDirection={{ xs: 'column', sm: 'row' }}
+            gap={{ xs: 2, sm: 0 }}
+          >
+            <Typography 
+              variant="h6"
+              sx={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
+            >
               Resumen Ejecutivo - {getPeriodLabel(selectedPeriod)}
             </Typography>
-            <Box display="flex" gap={1}>
-              <FormControl size="small" sx={{ minWidth: 150 }}>
+            <Box 
+              display="flex" 
+              gap={1} 
+              flexWrap="wrap"
+              width={{ xs: '100%', sm: 'auto' }}
+              justifyContent={{ xs: 'space-between', sm: 'flex-end' }}
+            >
+              <FormControl 
+                size="small" 
+                sx={{ 
+                  minWidth: { xs: 120, sm: 150 },
+                  order: { xs: 1, sm: 0 }
+                }}
+              >
                 <InputLabel>Período</InputLabel>
                 <Select
                   value={selectedPeriod}
@@ -286,26 +308,47 @@ const ExecutiveDashboard: React.FC = () => {
                   ))}
                 </Select>
               </FormControl>
-              <Button
-                startIcon={<FilterList />}
-                onClick={() => setShowFilters(!showFilters)}
-                variant={showFilters ? 'contained' : 'outlined'}
-              >
-                Filtros
-              </Button>
-              <Button
-                startIcon={<Settings />}
-                onClick={() => setShowSettings(true)}
-                variant="outlined"
-              >
-                Configuración
-              </Button>
-              <IconButton onClick={handleRefresh} disabled={isRefreshing}>
-                <Refresh />
-              </IconButton>
-              <IconButton onClick={() => handleExport('pdf')}>
-                <Download />
-              </IconButton>
+              <Box display="flex" gap={0.5}>
+                <Button
+                  startIcon={<FilterList />}
+                  onClick={() => setShowFilters(!showFilters)}
+                  variant={showFilters ? 'contained' : 'outlined'}
+                  size="small"
+                  sx={{ display: { xs: 'none', sm: 'flex' } }}
+                >
+                  Filtros
+                </Button>
+                <IconButton
+                  onClick={() => setShowFilters(!showFilters)}
+                  color={showFilters ? 'primary' : 'default'}
+                  size="small"
+                  sx={{ display: { xs: 'flex', sm: 'none' } }}
+                >
+                  <FilterList />
+                </IconButton>
+                <Button
+                  startIcon={<Settings />}
+                  onClick={() => setShowSettings(true)}
+                  variant="outlined"
+                  size="small"
+                  sx={{ display: { xs: 'none', sm: 'flex' } }}
+                >
+                  Config
+                </Button>
+                <IconButton
+                  onClick={() => setShowSettings(true)}
+                  size="small"
+                  sx={{ display: { xs: 'flex', sm: 'none' } }}
+                >
+                  <Settings />
+                </IconButton>
+                <IconButton onClick={handleRefresh} disabled={isRefreshing} size="small">
+                  <Refresh />
+                </IconButton>
+                <IconButton onClick={() => handleExport('pdf')} size="small">
+                  <Download />
+                </IconButton>
+              </Box>
             </Box>
           </Box>
 
@@ -519,38 +562,66 @@ const ExecutiveDashboard: React.FC = () => {
       </Grid>
 
       {/* KPIs principales */}
-      <Grid container spacing={3} sx={{ mb: 3 }}>
+      <Grid container spacing={{ xs: 2, sm: 3 }} sx={{ mb: { xs: 2, sm: 3 } }}>
         {kpisData.map((kpi) => (
           <Grid item xs={12} sm={6} md={4} lg={2} key={kpi.id}>
-            <Card sx={{ height: '100%' }}>
-              <CardContent>
+            <Card sx={{ height: '100%', minHeight: { xs: 120, sm: 140 } }}>
+              <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
                 <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
-                  <Avatar sx={{ bgcolor: getKPIColor(kpi.id), width: 40, height: 40 }}>
+                  <Avatar sx={{ 
+                    bgcolor: getKPIColor(kpi.id), 
+                    width: { xs: 32, sm: 40 }, 
+                    height: { xs: 32, sm: 40 } 
+                  }}>
                     {getKPIIcon(kpi.id)}
                   </Avatar>
                   <Chip
                     label={EXECUTIVE_UTILS.getStatusIcon(kpi.status)}
                     color={EXECUTIVE_UTILS.getStatusColor(kpi.status) as any}
                     size="small"
+                    sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}
                   />
                 </Box>
-                <Typography variant="h4" color="primary" gutterBottom>
+                <Typography 
+                  variant="h4" 
+                  color="primary" 
+                  gutterBottom
+                  sx={{ 
+                    fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' },
+                    lineHeight: 1.2
+                  }}
+                >
                   {EXECUTIVE_UTILS.formatValue(kpi.value, kpi.unit)}
                 </Typography>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
+                <Typography 
+                  variant="body2" 
+                  color="text.secondary" 
+                  gutterBottom
+                  sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+                >
                   {kpi.title}
                 </Typography>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <Typography variant="caption" color="text.secondary">
+                <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
+                  <Typography 
+                    variant="caption" 
+                    color="text.secondary"
+                    sx={{ fontSize: { xs: '0.65rem', sm: '0.75rem' } }}
+                  >
                     {EXECUTIVE_UTILS.formatChange(kpi.change)}
                   </Typography>
                   <Chip
                     label={EXECUTIVE_UTILS.getChangeIcon(kpi.changeType)}
                     size="small"
                     color={EXECUTIVE_UTILS.getChangeColor(kpi.change, kpi.changeType) as any}
+                    sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}
                   />
                 </Box>
-                <Typography variant="caption" color="text.secondary" display="block">
+                <Typography 
+                  variant="caption" 
+                  color="text.secondary" 
+                  display="block"
+                  sx={{ fontSize: { xs: '0.65rem', sm: '0.75rem' } }}
+                >
                   {kpi.period}
                 </Typography>
               </CardContent>
@@ -561,17 +632,21 @@ const ExecutiveDashboard: React.FC = () => {
 
       {/* Alertas destacadas */}
       {showAlerts && alertsData.length > 0 && (
-        <Card sx={{ mb: 3 }}>
+        <Card sx={{ mb: { xs: 2, sm: 3 } }}>
           <CardHeader
             title="Alertas Destacadas"
+            titleTypographyProps={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
             action={
-              <IconButton onClick={() => dispatch(setShowAlerts(!showAlerts))}>
+              <IconButton 
+                onClick={() => dispatch(setShowAlerts(!showAlerts))}
+                size="small"
+              >
                 {showAlerts ? <VisibilityOff /> : <Visibility />}
               </IconButton>
             }
           />
-          <CardContent>
-            <Grid container spacing={2}>
+          <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+            <Grid container spacing={{ xs: 1, sm: 2 }}>
               {alertsData.slice(0, 6).map((alert) => (
                 <Grid item xs={12} sm={6} md={4} key={alert.id}>
                   <Alert
@@ -584,14 +659,29 @@ const ExecutiveDashboard: React.FC = () => {
                         onClick={() => {
                           // Implementar acción de alerta
                         }}
+                        sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}
                       >
                         Ver
                       </Button>
                     }
+                    sx={{ 
+                      fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                      '& .MuiAlert-message': {
+                        width: '100%'
+                      }
+                    }}
                   >
-                    <AlertTitle>Alerta del Sistema</AlertTitle>
-                    {alert.message}
-                    <Typography variant="caption" display="block">
+                    <AlertTitle sx={{ fontSize: { xs: '0.8rem', sm: '0.875rem' } }}>
+                      Alerta del Sistema
+                    </AlertTitle>
+                    <Typography sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}>
+                      {alert.message}
+                    </Typography>
+                    <Typography 
+                      variant="caption" 
+                      display="block"
+                      sx={{ fontSize: { xs: '0.65rem', sm: '0.75rem' } }}
+                    >
                       Tiempo: {alert.time}
                     </Typography>
                   </Alert>
@@ -604,41 +694,72 @@ const ExecutiveDashboard: React.FC = () => {
 
       {/* Insights destacados */}
       {showInsights && insightsData.length > 0 && (
-        <Card sx={{ mb: 3 }}>
+        <Card sx={{ mb: { xs: 2, sm: 3 } }}>
           <CardHeader
             title="Insights y Recomendaciones"
+            titleTypographyProps={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
             action={
-              <IconButton onClick={() => dispatch(setShowInsights(!showInsights))}>
+              <IconButton 
+                onClick={() => dispatch(setShowInsights(!showInsights))}
+                size="small"
+              >
                 {showInsights ? <VisibilityOff /> : <Visibility />}
               </IconButton>
             }
           />
-          <CardContent>
-            <Grid container spacing={2}>
+          <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+            <Grid container spacing={{ xs: 1, sm: 2 }}>
               {insightsData.slice(0, 6).map((insight) => (
                 <Grid item xs={12} sm={6} md={4} key={insight.id}>
-                  <Card variant="outlined">
-                    <CardContent>
-                      <Box display="flex" alignItems="center" gap={1} mb={2}>
-                        <Avatar sx={{ bgcolor: getInsightColor('efficiency'), width: 32, height: 32 }}>
+                  <Card variant="outlined" sx={{ height: '100%' }}>
+                    <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+                      <Box display="flex" alignItems="center" gap={1} mb={2} flexWrap="wrap">
+                        <Avatar sx={{ 
+                          bgcolor: getInsightColor('efficiency'), 
+                          width: { xs: 28, sm: 32 }, 
+                          height: { xs: 28, sm: 32 } 
+                        }}>
                           {getInsightIcon('efficiency')}
                         </Avatar>
-                        <Typography variant="h6" noWrap>
+                        <Typography 
+                          variant="h6" 
+                          noWrap
+                          sx={{ 
+                            fontSize: { xs: '0.875rem', sm: '1rem' },
+                            flex: 1,
+                            minWidth: 0
+                          }}
+                        >
                           {insight.name}
                         </Typography>
                         <Chip
                           label="📈"
                           color="primary"
                           size="small"
+                          sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}
                         />
                       </Box>
-                      <Typography variant="body2" color="text.secondary" gutterBottom>
+                      <Typography 
+                        variant="body2" 
+                        color="text.secondary" 
+                        gutterBottom
+                        sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+                      >
                         Consumo: {insight.consumption.toLocaleString()} kWh | Eficiencia: {insight.efficiency}%
                       </Typography>
-                      <Typography variant="caption" color="primary">
+                      <Typography 
+                        variant="caption" 
+                        color="primary"
+                        sx={{ fontSize: { xs: '0.65rem', sm: '0.75rem' } }}
+                      >
                         Tendencia: {insight.trend === 'up' ? '📈' : insight.trend === 'down' ? '📉' : '➡️'}
                       </Typography>
-                      <Typography variant="caption" color="success.main" display="block">
+                      <Typography 
+                        variant="caption" 
+                        color="success.main" 
+                        display="block"
+                        sx={{ fontSize: { xs: '0.65rem', sm: '0.75rem' } }}
+                      >
                         Ahorro estimado: ${(insight.consumption * 0.1).toLocaleString()} COP
                       </Typography>
                     </CardContent>
@@ -652,39 +773,60 @@ const ExecutiveDashboard: React.FC = () => {
 
       {/* Tendencias principales */}
       {showTrends && trendsData.length > 0 && (
-        <Card sx={{ mb: 3 }}>
+        <Card sx={{ mb: { xs: 2, sm: 3 } }}>
           <CardHeader
             title="Tendencias Principales"
+            titleTypographyProps={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
             action={
-              <IconButton onClick={() => dispatch(setShowTrends(!showTrends))}>
+              <IconButton 
+                onClick={() => dispatch(setShowTrends(!showTrends))}
+                size="small"
+              >
                 {showTrends ? <VisibilityOff /> : <Visibility />}
               </IconButton>
             }
           />
-          <CardContent>
-            <Grid container spacing={3}>
+          <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+            <Grid container spacing={{ xs: 2, sm: 3 }}>
               {trendsData.slice(0, 4).map((trend) => (
                 <Grid item xs={12} sm={6} md={3} key={trend.id}>
-                  <Card variant="outlined">
-                    <CardContent>
-                      <Typography variant="h6" gutterBottom>
+                  <Card variant="outlined" sx={{ height: '100%' }}>
+                    <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+                      <Typography 
+                        variant="h6" 
+                        gutterBottom
+                        sx={{ fontSize: { xs: '0.875rem', sm: '1rem' } }}
+                      >
                         {trend.period}
                       </Typography>
-                      <Typography variant="body2" color="text.secondary" gutterBottom>
+                      <Typography 
+                        variant="body2" 
+                        color="text.secondary" 
+                        gutterBottom
+                        sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+                      >
                         Eficiencia: {trend.efficiency}%
                       </Typography>
-                      <Box display="flex" alignItems="center" gap={1}>
-                        <Typography variant="body2">
+                      <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
+                        <Typography 
+                          variant="body2"
+                          sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+                        >
                           Consumo: {trend.consumption.toLocaleString()} kWh
                         </Typography>
                         <Chip
                           label="📈"
                           size="small"
                           color="primary"
+                          sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}
                         />
                       </Box>
                       <Box mt={2}>
-                        <Typography variant="caption" color="text.secondary">
+                        <Typography 
+                          variant="caption" 
+                          color="text.secondary"
+                          sx={{ fontSize: { xs: '0.65rem', sm: '0.75rem' } }}
+                        >
                           Período: {trend.period}
                         </Typography>
                       </Box>
