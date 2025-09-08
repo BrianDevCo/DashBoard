@@ -83,16 +83,20 @@ const Reports: React.FC = () => {
                 <DatePicker
                   label="Fecha Inicio"
                   value={startDate}
-                  onChange={(newValue) => setStartDate(newValue)}
-                  renderInput={(params) => <TextField {...params} fullWidth />}
+                  onChange={(newValue) => setStartDate(newValue as Date | null)}
+                  renderInput={(params) => (
+                    <TextField {...params} fullWidth variant="outlined" />
+                  )}
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={3}>
                 <DatePicker
                   label="Fecha Fin"
                   value={endDate}
-                  onChange={(newValue) => setEndDate(newValue)}
-                  renderInput={(params) => <TextField {...params} fullWidth />}
+                  onChange={(newValue) => setEndDate(newValue as Date | null)}
+                  renderInput={(params) => (
+                    <TextField {...params} fullWidth variant="outlined" />
+                  )}
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={2}>

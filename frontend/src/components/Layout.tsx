@@ -24,12 +24,20 @@ import {
   AccountCircle as AccountIcon,
   Brightness4 as DarkModeIcon,
   Brightness7 as LightModeIcon,
+  Widgets as WidgetsIcon,
+  Warning as WarningIcon,
+  Download as DownloadIcon,
+  People as PeopleIcon,
+  TrendingUp as TrendingUpIcon,
+  Compare as CompareIcon,
+  Description as DescriptionIcon,
 } from '@mui/icons-material';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
 import { toggleSidebar, toggleTheme } from '../store/slices/uiSlice';
 import { useAuth } from '../hooks/useAuth';
+import GlobalSearch from './GlobalSearch';
 
 const drawerWidth = 240;
 
@@ -46,8 +54,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const { user, logout } = useAuth();
 
   const menuItems = [
-    { text: 'Dashboard', icon: <DashboardIcon />, path: '/' },
+    { text: 'Dashboard Ejecutivo', icon: <DashboardIcon />, path: '/' },
+    { text: 'Dashboard Técnico', icon: <ChartIcon />, path: '/dashboard' },
     { text: 'Métricas Energéticas', icon: <ChartIcon />, path: '/metrics' },
+    { text: 'Dashboard Personalizable', icon: <WidgetsIcon />, path: '/custom-dashboard' },
+    { text: 'Alertas', icon: <WarningIcon />, path: '/alerts' },
+    { text: 'Exportar e Imprimir', icon: <DownloadIcon />, path: '/export' },
+    { text: 'Usuarios', icon: <PeopleIcon />, path: '/users' },
+    { text: 'KPIs', icon: <TrendingUpIcon />, path: '/kpis' },
+    { text: 'Análisis Comparativo', icon: <CompareIcon />, path: '/comparative' },
+    { text: 'Gestión de Reportes', icon: <DescriptionIcon />, path: '/report-management' },
+    { text: 'Mi Configuración', icon: <AccountIcon />, path: '/user-config' },
     { text: 'Reportes', icon: <ReportIcon />, path: '/reports' },
     { text: 'Configuración', icon: <SettingsIcon />, path: '/settings' },
   ];
@@ -85,6 +102,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Sistema de Monitoreo Energético
           </Typography>
+
+          <Box sx={{ flexGrow: 1, maxWidth: 400, mx: 2 }}>
+            <GlobalSearch />
+          </Box>
 
           <IconButton color="inherit" onClick={() => dispatch(toggleTheme())}>
             {appTheme === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}

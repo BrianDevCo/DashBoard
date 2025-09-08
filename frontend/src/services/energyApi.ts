@@ -22,6 +22,34 @@ export interface EnergySummary {
   efficiency: number;
   cost: number;
   savings: number;
+  powerFactor: number;
+  reactivePercentage: number;
+  maxDemand: number;
+  avgDemand: number;
+  minDemand: number;
+}
+
+export interface BillingData {
+  id: string;
+  period: string;
+  startDate: string;
+  endDate: string;
+  totalKWh: number;
+  totalKVarh: number;
+  totalCost: number;
+  energyCost: number;
+  reactiveCost: number;
+  taxes: number;
+  meterId: string;
+  location: string;
+}
+
+export interface ComparisonData {
+  current: EnergyMetric[];
+  typical: EnergyMetric[];
+  period: string;
+  variance: number;
+  trend: 'increasing' | 'decreasing' | 'stable';
 }
 
 export interface ChartData {
@@ -54,7 +82,7 @@ export const energyApi = createApi({
     getRealTimeMetrics: builder.query<EnergyMetric[], void>({
       query: () => 'energy/real-time',
       providesTags: ['EnergyMetrics'],
-      pollingInterval: 30000, // Actualizar cada 30 segundos
+      // pollingInterval: 30000, // Actualizar cada 30 segundos
     }),
 
     // Obtener métricas históricas
@@ -133,6 +161,52 @@ export const energyApi = createApi({
       query: () => 'energy/meters',
       providesTags: ['EnergyMetrics'],
     }),
+
+    // Obtener datos de facturación
+    getBillingData: builder.query<BillingData[], {
+      startDate: string;
+      endDate: string;
+      meterId?: string;
+    }>({
+      query: (params) => ({
+        url: 'energy/billing',
+        params,
+      }),
+      providesTags: ['EnergyMetrics'],
+    }),
+
+    // Obtener datos de comparación (consumos típicos vs actuales)
+    getComparisonData: builder.query<ComparisonData, {
+      currentStartDate: string;
+      currentEndDate: string;
+      typicalStartDate: string;
+      typicalEndDate: string;
+      meterId?: string;
+    }>({
+      query: (params) => ({
+        url: 'energy/comparison',
+        params,
+      }),
+      providesTags: ['EnergyMetrics'],
+    }),
+
+    // Obtener datos de facturación vs consumos
+    getBillingComparison: builder.query<{
+      billing: BillingData[];
+      consumption: EnergyMetric[];
+      variance: number;
+      costPerKWh: number;
+    }, {
+      startDate: string;
+      endDate: string;
+      meterId?: string;
+    }>({
+      query: (params) => ({
+        url: 'energy/billing-comparison',
+        params,
+      }),
+      providesTags: ['EnergyMetrics'],
+    }),
   }),
 });
 
@@ -144,5 +218,8 @@ export const {
   useGetAlertsQuery,
   useGetObisCodesQuery,
   useGetMetersQuery,
+  useGetBillingDataQuery,
+  useGetComparisonDataQuery,
+  useGetBillingComparisonQuery,
 } = energyApi;
 

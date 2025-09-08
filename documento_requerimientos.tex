@@ -1,0 +1,302 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+
+% Configuración de márgenes
+\geometry{left=2.5cm,right=2.5cm,top=3cm,bottom=3cm}
+
+% Configuración de encabezados y pies de página
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{Dashboard de Monitoreo Energético}
+\fancyhead[R]{Documento de Requerimientos}
+\fancyfoot[C]{\thepage}
+
+% Configuración de títulos
+\titleformat{\section}{\Large\bfseries\color{blue!70!black}}{\thesection}{1em}{}
+\titleformat{\subsection}{\large\bfseries\color{blue!50!black}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries\color{blue!30!black}}{\thesubsubsection}{1em}{}
+
+% Configuración de hipervínculos
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    citecolor=red
+}
+
+\begin{document}
+
+% Portada
+\begin{titlepage}
+\centering
+\vspace*{2cm}
+
+{\Huge\bfseries Dashboard de Monitoreo\\[0.5cm] Energético Inteligente}
+
+\vspace{1cm}
+
+{\Large Documento de Requerimientos Funcionales}
+
+\vspace{2cm}
+
+\begin{tabular}{ll}
+\textbf{Versión:} & 1.0 \\
+\textbf{Fecha:} & \today \\
+\textbf{Cliente:} & CGM - Comercialización de Energía \\
+\textbf{Proyecto:} & Sistema de Analítica Energética \\
+\end{tabular}
+
+\vspace{3cm}
+
+{\large Desarrollado para facilitar la toma inteligente de decisiones\\en el consumo energético de clientes finales}
+
+\vfill
+
+{\large \today}
+
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+\section{Introducción}
+
+\subsection{Objetivo General}
+
+El desarrollo de este dashboard tiene como objetivo principal agregar valor a los servicios que actualmente prestamos a usuarios finales de la comercialización de energía y clientes CGM. La analítica de datos se ha convertido en el pilar para garantizar lo que hoy conocemos en el sector como "consumo inteligente", lo que traduce en que nuestros clientes puedan visualizar casi en tiempo real y en el momento que lo dispongan información crucial para su operativa como:
+
+\begin{itemize}
+    \item Matrices de consumos históricos
+    \item Matrices de consumos actuales
+    \item Comparativa de energía versus facturación
+    \item Comparación de consumos actuales versus comportamientos típicos históricos
+    \item Alertas de picos de consumos (mínimos y máximos)
+\end{itemize}
+
+Lo anterior busca permitirnos ayudar a nuestros clientes con la toma inteligente de decisiones que puedan ayudar al ahorro y buen comportamiento de los consumos de energía activa, al control de excedentes y cobros de reactiva.
+
+\section{Requerimientos Funcionales}
+
+\subsection{RF01. Visualización del Consumo de Energía}
+
+\textbf{Objetivo:} Permitir al usuario visualizar sus consumos de energía activa y reactiva de forma clara, precisa y personalizable.
+
+\begin{enumerate}[label=RF01.\arabic*]
+    \item El sistema debe mostrar el consumo de energía activa importada y exportada (kWh-kWhR) por frontera comercial de manera matricial y gráfica.
+    \item El sistema debe mostrar el consumo de energía reactiva capacitiva e inductiva (-kVarhD-kVARh) por frontera comercial de manera matricial y gráfica.
+    \item El sistema debe permitir seleccionar distintos intervalos de tiempo: últimos 15 min, hora, día, semana, mes, año para las matrices y gráficas.
+    \item El sistema debe permitir elegir el rango de fechas personalizado para análisis.
+    \item El sistema debe mostrar los datos en formatos gráficos: líneas, barras, áreas, tortas (cuando aplique).
+    \item El sistema debe mostrar un resumen con los totales de consumo, consumo medio, máximo y mínimo para el período seleccionado y permitir compararlos con un consumo seleccionable.
+    \item El sistema debe mostrar la comparativa de consumos típicos versus consumos seleccionado.
+    \item El sistema debe mostrar los históricos de facturación y mostrar la comparativa de factura versus consumos de energías.
+\end{enumerate}
+
+\subsection{RF02. Parametrización del Dashboard}
+
+\textbf{Objetivo:} Permitir a los usuarios personalizar qué y cómo se muestran los datos.
+
+\begin{enumerate}[label=RF02.\arabic*]
+    \item El usuario podrá seleccionar los widgets (gráficos, tablas, KPIs) que desea ver en su panel principal.
+    \item El usuario podrá organizar la disposición de los widgets mediante drag \& drop.
+    \item El sistema debe permitir guardar distintas vistas personalizadas del dashboard por usuario.
+    \item El usuario podrá definir unidades preferidas (kWh, MWh, kVARh).
+    \item El sistema debe permitir configurar etiquetas y nombres personalizados para los puntos de medición.
+    \item El usuario podrá elegir el color de cada serie de datos en los gráficos.
+    \item Se debe poder definir zonas horarias y formatos de fecha/hora por usuario.
+\end{enumerate}
+
+\subsection{RF03. Gestión de Alertas y Notificaciones}
+
+\textbf{Objetivo:} Informar proactivamente sobre condiciones anómalas o eventos importantes.
+
+\begin{enumerate}[label=RF03.\arabic*]
+    \item El usuario podrá configurar alertas por:
+    \begin{itemize}
+        \item Consumo diario/horario superior o inferior a un umbral.
+        \item Factor de potencia inferior a un valor crítico.
+        \item Caída en la lectura de medidores (sin datos).
+    \end{itemize}
+    \item Las alertas deben poder enviarse por correo electrónico, notificación en plataforma y SMS (opcional).
+    \item El sistema debe mostrar un historial de alertas con fecha, descripción y estado (abierta, cerrada).
+    \item Las alertas deben poder asociarse a grupos de medidores, ubicaciones o usuarios específicos.
+    \item Se debe poder establecer horarios de activación de alertas (ej. solo en horario laboral).
+\end{enumerate}
+
+\subsection{RF04. Exportación e Impresión de Datos}
+
+\textbf{Objetivo:} Facilitar la generación de reportes y el análisis externo.
+
+\begin{enumerate}[label=RF04.\arabic*]
+    \item El usuario podrá exportar los datos visualizados en formatos CSV, Excel y PDF.
+    \item El sistema debe permitir imprimir directamente los gráficos o tablas desde la interfaz.
+    \item Se debe poder configurar el formato de exportación (nombres de columnas, separador decimal, etc.).
+    \item El usuario podrá generar reportes personalizados con múltiples secciones.
+\end{enumerate}
+
+\subsection{RF05. Administración de Usuarios y Roles}
+
+\textbf{Objetivo:} Controlar el acceso y las funcionalidades disponibles según perfil.
+
+\begin{enumerate}[label=RF05.\arabic*]
+    \item El sistema debe permitir crear, modificar y eliminar usuarios.
+    \item Cada usuario debe tener un rol asignado: administrador, mediciones, usuario final.
+    \item El administrador podrá definir permisos personalizados por usuario o grupo.
+    \item Cada usuario solo podrá ver la información de sus puntos de medición (a menos que tenga permisos globales).
+    \item Se debe registrar el historial de acceso de los usuarios.
+\end{enumerate}
+
+\subsection{RF07. Indicadores Clave de Desempeño (KPIs)}
+
+\textbf{Objetivo:} Mostrar información estratégica para la toma de decisiones.
+
+\begin{enumerate}[label=RF07.\arabic*]
+    \item Mostrar el consumo total por sitio, cliente o agrupación.
+    \item Mostrar la demanda máxima registrada y cuándo ocurrió.
+    \item Mostrar el porcentaje de energía reactiva respecto a la activa.
+\end{enumerate}
+
+\subsection{RF08. Análisis Comparativo y Tendencias}
+
+\textbf{Objetivo:} Facilitar el análisis temporal y entre entidades.
+
+\begin{enumerate}[label=RF08.\arabic*]
+    \item El sistema debe permitir comparar consumos entre:
+    \begin{itemize}
+        \item Períodos diferentes (Ej. agosto vs julio).
+        \item Puntos de medición distintos.
+        \item Clientes, sedes, o agrupaciones.
+    \end{itemize}
+    \item El usuario podrá ver tendencias lineales o de regresión para análisis predictivo básico.
+    \item Se podrán generar rankings de mayores consumidores por grupo o período.
+    \item El sistema podrá mostrar mapas de calor de consumo por hora y día.
+\end{enumerate}
+
+\subsection{RF09. Reportes Automatizados y Programados}
+
+\textbf{Objetivo:} Generar informes sin intervención manual.
+
+\begin{enumerate}[label=RF09.\arabic*]
+    \item Los usuarios podrán crear plantillas de reportes con contenido personalizado.
+    \item El sistema debe permitir programar la generación automática de reportes: diaria, semanal, mensual.
+    \item Los reportes pueden enviarse automáticamente por correo a usuarios seleccionados.
+    \item El sistema debe mantener un historial de reportes generados.
+\end{enumerate}
+
+\section{Nuevos Requerimientos Adicionales}
+
+\subsection{RF10. Dashboard de Resumen Ejecutivo}
+
+\textbf{Objetivo:} Proporcionar una vista clara y directa de la información más importante para la toma de decisiones ejecutivas.
+
+\textbf{Justificación:} 
+\begin{itemize}
+    \item \textbf{Simplicidad:} Vista clara y directa
+    \item \textbf{Valor inmediato:} Los usuarios ven lo importante de un vistazo
+    \item \textbf{Fácil implementación:} Usa componentes ya existentes
+    \item \textbf{Impacto alto:} Mejora la experiencia desde el primer uso
+\end{itemize}
+
+\begin{enumerate}[label=RF10.\arabic*]
+    \item El sistema debe mostrar un resumen ejecutivo con los KPIs más críticos en una sola pantalla.
+    \item Se debe incluir un indicador de estado general del sistema (normal, alerta, crítico).
+    \item El dashboard debe mostrar las tendencias principales de consumo en los últimos períodos.
+    \item Se debe incluir un resumen de alertas activas y su nivel de prioridad.
+    \item El sistema debe permitir personalizar qué métricas aparecen en el resumen ejecutivo.
+    \item Se debe mostrar comparativas rápidas con períodos anteriores (mes anterior, año anterior).
+    \item El dashboard debe incluir gráficos de alto nivel que no requieran interpretación técnica.
+\end{enumerate}
+
+\subsection{RF11. Sistema de Búsqueda y Filtros}
+
+\textbf{Objetivo:} Facilitar la navegación y localización de información específica dentro del sistema.
+
+\textbf{Justificación:}
+\begin{itemize}
+    \item \textbf{Necesidad real:} Los usuarios se pierden en mucha información
+    \item \textbf{Productividad:} Encuentran lo que buscan más rápido
+    \item \textbf{Reutilizable:} Funciona en todos los módulos
+    \item \textbf{Escalable:} Mejora con más datos
+\end{itemize}
+
+\begin{enumerate}[label=RF11.\arabic*]
+    \item El sistema debe incluir una barra de búsqueda global que funcione en todos los módulos.
+    \item Se debe permitir buscar por: cliente, punto de medición, fecha, tipo de energía, valores específicos.
+    \item El sistema debe incluir filtros avanzados con múltiples criterios combinables.
+    \item Se debe implementar búsqueda por rangos de fechas con calendarios interactivos.
+    \item El sistema debe guardar búsquedas frecuentes para acceso rápido.
+    \item Se debe incluir sugerencias automáticas mientras el usuario escribe.
+    \item El sistema debe permitir exportar los resultados de búsqueda.
+    \item Se debe implementar búsqueda por proximidad de valores (ej. "consumos cerca de 1000 kWh").
+\end{enumerate}
+
+\subsection{RF12. Configuración de Usuario}
+
+\textbf{Objetivo:} Permitir a cada usuario personalizar su experiencia y adaptar el sistema a sus necesidades específicas.
+
+\textbf{Justificación:}
+\begin{itemize}
+    \item \textbf{Personalización:} Cada usuario puede adaptar el sistema
+    \item \textbf{Adopción:} Los usuarios se sienten más cómodos
+    \item \textbf{Retención:} Mayor satisfacción del usuario
+    \item \textbf{Flexibilidad:} Se adapta a diferentes necesidades
+\end{itemize}
+
+\begin{enumerate}[label=RF12.\arabic*]
+    \item El usuario podrá configurar sus preferencias de visualización (tema, colores, tamaño de fuente).
+    \item Se debe permitir personalizar el idioma de la interfaz y formatos de fecha/hora.
+    \item El sistema debe recordar las configuraciones de widgets y disposición del dashboard.
+    \item Se debe permitir configurar notificaciones personalizadas por tipo de alerta.
+    \item El usuario podrá establecer sus unidades de medida preferidas (kWh, MWh, etc.).
+    \item Se debe incluir configuración de zonas horarias y horarios de trabajo.
+    \item El sistema debe permitir configurar atajos de teclado personalizados.
+    \item Se debe incluir opciones de accesibilidad (alto contraste, texto grande, etc.).
+    \item El usuario podrá configurar sus reportes predeterminados y plantillas favoritas.
+    \item Se debe permitir exportar e importar configuraciones entre usuarios.
+\end{enumerate}
+
+\section{Consideraciones Técnicas}
+
+\subsection{Arquitectura del Sistema}
+
+El sistema debe implementarse siguiendo una arquitectura de microservicios que permita:
+
+\begin{itemize}
+    \item Escalabilidad horizontal
+    \item Alta disponibilidad
+    \item Mantenimiento independiente de módulos
+    \item Integración con sistemas legacy
+\end{itemize}
+
+\subsection{Tecnologías Implementadas}
+
+\begin{itemize}
+    \item \textbf{Frontend:} React.js con TypeScript
+    \item \textbf{Backend:} Node.js con Express.js
+    \item \textbf{Base de Datos:} Oracle Database con Redis para caché
+    \item \textbf{Visualización:} Chart.js con react-chartjs-2
+    \item \textbf{UI Framework:} Material-UI (MUI)
+    \item \textbf{Estado:} Redux Toolkit
+    \item \textbf{Contenedores:} Docker con Docker Compose
+    \item \textbf{Proxy:} Nginx
+\end{itemize}
+
+\section{Conclusiones}
+
+Este documento de requerimientos establece las bases funcionales para el desarrollo de un dashboard de monitoreo energético inteligente que permitirá a los clientes de CGM optimizar su consumo energético mediante la visualización, análisis y predicción de datos en tiempo real.
+
+La implementación de estos requerimientos, incluyendo los tres nuevos módulos adicionales (integración con sistemas externos, análisis predictivo con ML, y dashboard móvil con accesibilidad), garantizará una solución integral y moderna para la gestión energética inteligente.
+
+\end{document}

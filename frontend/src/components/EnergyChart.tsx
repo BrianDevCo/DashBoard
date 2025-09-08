@@ -5,13 +5,15 @@ import {
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
+  ArcElement,
   Title,
   Tooltip,
   Legend,
   Filler,
 } from 'chart.js';
-import { Line } from 'react-chartjs-2';
-import { Box, Typography } from '@mui/material';
+import { Line, Bar, Doughnut } from 'react-chartjs-2';
+import { Box, Typography, FormControl, InputLabel, Select, MenuItem, Grid, Card, CardContent } from '@mui/material';
 import { EnergyMetric } from '../services/energyApi';
 
 ChartJS.register(
@@ -19,17 +21,33 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
+  BarElement,
+  ArcElement,
   Title,
   Tooltip,
   Legend,
   Filler
 );
 
+export type ChartType = 'line' | 'bar' | 'area' | 'doughnut';
+
 interface EnergyChartProps {
   data: EnergyMetric[];
+  chartType?: ChartType;
+  showActiveEnergy?: boolean;
+  showReactiveEnergy?: boolean;
+  showComparison?: boolean;
+  comparisonData?: EnergyMetric[];
 }
 
-const EnergyChart: React.FC<EnergyChartProps> = ({ data }) => {
+const EnergyChart: React.FC<EnergyChartProps> = ({ 
+  data, 
+  chartType = 'line',
+  showActiveEnergy = true,
+  showReactiveEnergy = true,
+  showComparison = false,
+  comparisonData = []
+}) => {
   if (!data || data.length === 0) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="300px">
@@ -41,43 +59,81 @@ const EnergyChart: React.FC<EnergyChartProps> = ({ data }) => {
   }
 
   // Preparar datos para el gráfico
-  const chartData = {
-    labels: data.map(item => new Date(item.timestamp).toLocaleTimeString()),
-    datasets: [
-      {
-        label: 'Energía Activa Importada (kWh)',
-        data: data.map(item => item.kWhD),
-        borderColor: 'rgb(53, 162, 235)',
-        backgroundColor: 'rgba(53, 162, 235, 0.1)',
-        fill: true,
-        tension: 0.4,
-      },
-      {
-        label: 'Energía Reactiva Importada (kVarh)',
-        data: data.map(item => item.kVarhD),
-        borderColor: 'rgb(255, 99, 132)',
-        backgroundColor: 'rgba(255, 99, 132, 0.1)',
-        fill: true,
-        tension: 0.4,
-      },
-      {
-        label: 'Energía Activa Exportada (kWh)',
-        data: data.map(item => item.kWhR),
-        borderColor: 'rgb(75, 192, 192)',
-        backgroundColor: 'rgba(75, 192, 192, 0.1)',
-        fill: true,
-        tension: 0.4,
-      },
-      {
-        label: 'Energía Reactiva Penalizada (kVarh)',
-        data: data.map(item => item.kVarhPenalized),
-        borderColor: 'rgb(255, 159, 64)',
-        backgroundColor: 'rgba(255, 159, 64, 0.1)',
-        fill: true,
-        tension: 0.4,
-      },
-    ],
+  const prepareChartData = () => {
+    const labels = data.map(item => new Date(item.timestamp).toLocaleTimeString());
+    const datasets: any[] = [];
+
+    // Energía Activa
+    if (showActiveEnergy) {
+      datasets.push(
+        {
+          label: 'Energía Activa Importada (kWh)',
+          data: data.map(item => item.kWhD),
+          borderColor: 'rgb(53, 162, 235)',
+          backgroundColor: 'rgba(53, 162, 235, 0.1)',
+          fill: chartType === 'area',
+          tension: 0.4,
+        },
+        {
+          label: 'Energía Activa Exportada (kWh)',
+          data: data.map(item => item.kWhR),
+          borderColor: 'rgb(75, 192, 192)',
+          backgroundColor: 'rgba(75, 192, 192, 0.1)',
+          fill: chartType === 'area',
+          tension: 0.4,
+        }
+      );
+    }
+
+    // Energía Reactiva
+    if (showReactiveEnergy) {
+      datasets.push(
+        {
+          label: 'Energía Reactiva Capacitiva (kVarh)',
+          data: data.map(item => item.kVarhD),
+          borderColor: 'rgb(255, 99, 132)',
+          backgroundColor: 'rgba(255, 99, 132, 0.1)',
+          fill: chartType === 'area',
+          tension: 0.4,
+        },
+        {
+          label: 'Energía Reactiva Inductiva (kVarh)',
+          data: data.map(item => item.kVarhR),
+          borderColor: 'rgb(255, 159, 64)',
+          backgroundColor: 'rgba(255, 159, 64, 0.1)',
+          fill: chartType === 'area',
+          tension: 0.4,
+        },
+        {
+          label: 'Energía Reactiva Penalizada (kVarh)',
+          data: data.map(item => item.kVarhPenalized),
+          borderColor: 'rgb(255, 206, 86)',
+          backgroundColor: 'rgba(255, 206, 86, 0.1)',
+          fill: chartType === 'area',
+          tension: 0.4,
+        }
+      );
+    }
+
+    // Datos de comparación
+    if (showComparison && comparisonData.length > 0) {
+      datasets.push(
+        {
+          label: 'Consumo Típico (kWh)',
+          data: comparisonData.map(item => item.kWhD),
+          borderColor: 'rgb(128, 128, 128)',
+          backgroundColor: 'rgba(128, 128, 128, 0.1)',
+          borderDash: [5, 5],
+          fill: false,
+          tension: 0.4,
+        }
+      );
+    }
+
+    return { labels, datasets };
   };
+
+  const chartData = prepareChartData();
 
   const options = {
     responsive: true,
@@ -142,9 +198,23 @@ const EnergyChart: React.FC<EnergyChartProps> = ({ data }) => {
     },
   };
 
+  // Renderizar el tipo de gráfico apropiado
+  const renderChart = () => {
+    switch (chartType) {
+      case 'bar':
+        return <Bar data={chartData} options={options} />;
+      case 'doughnut':
+        return <Doughnut data={chartData} options={options} />;
+      case 'area':
+      case 'line':
+      default:
+        return <Line data={chartData} options={options} />;
+    }
+  };
+
   return (
     <Box sx={{ height: 400, position: 'relative' }}>
-      <Line data={chartData} options={options} />
+      {renderChart()}
     </Box>
   );
 };
