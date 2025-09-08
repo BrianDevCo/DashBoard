@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { mockEnergyData, mockExecutiveData, mockKPIData } from '../data/mockData';
 
 // Tipos de datos energéticos
 export interface EnergyMetric {

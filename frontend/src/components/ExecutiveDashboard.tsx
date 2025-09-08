@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { mockExecutiveData } from '../data/mockExecutiveData';
 import {
   Box,
   Typography,
@@ -154,38 +155,19 @@ const ExecutiveDashboard: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('thisMonth');
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Queries
-  const { data: kpisData, refetch: refetchKPIs } = useGetExecutiveKPIsQuery(filter);
-  const { data: alertsData, refetch: refetchAlerts } = useGetExecutiveAlertsQuery(filter);
-  const { data: trendsData, refetch: refetchTrends } = useGetExecutiveTrendsQuery(filter);
-  const { data: summaryData, refetch: refetchSummary } = useGetExecutiveSummaryQuery(filter);
-  const { data: insightsData, refetch: refetchInsights } = useGetExecutiveInsightsQuery(filter);
-  const { data: statsData, refetch: refetchStats } = useGetExecutiveStatsQuery(filter);
+  // Usar datos simulados
+  const kpisData = mockExecutiveData.kpis;
+  const alertsData = mockExecutiveData.alerts;
+  const trendsData = mockExecutiveData.trends;
+  const summaryData = mockExecutiveData.summary;
+  const insightsData = mockExecutiveData.topConsumers;
+  const statsData = mockExecutiveData.consumptionByCategory;
 
   // Mutations
   const [refreshExecutiveData] = useRefreshExecutiveDataMutation();
   const [exportExecutiveData] = useExportExecutiveDataMutation();
 
-  // Sincronizar datos con el store
-  useEffect(() => {
-    if (kpisData) dispatch(setKPIs(kpisData));
-  }, [kpisData, dispatch]);
-
-  useEffect(() => {
-    if (alertsData) dispatch(setAlerts(alertsData));
-  }, [alertsData, dispatch]);
-
-  useEffect(() => {
-    if (trendsData) dispatch(setTrends(trendsData));
-  }, [trendsData, dispatch]);
-
-  useEffect(() => {
-    if (summaryData) dispatch(setSummary(summaryData));
-  }, [summaryData, dispatch]);
-
-  useEffect(() => {
-    if (insightsData) dispatch(setInsights(insightsData));
-  }, [insightsData, dispatch]);
+  // Los datos ya están disponibles directamente desde mockExecutiveData
 
   const handleRefresh = async () => {
     setIsRefreshing(true);
