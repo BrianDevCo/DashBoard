@@ -37,7 +37,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState, AppDispatch } from '../store';
 import { toggleSidebar, toggleTheme } from '../store/slices/uiSlice';
 import { useAuth } from '../hooks/useAuth';
-import GlobalSearch from './GlobalSearch';
+import HeaderSearch from './HeaderSearch';
 
 const drawerWidth = 240;
 
@@ -88,72 +88,198 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       {/* AppBar */}
       <AppBar
         position="fixed"
+        elevation={0}
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
           zIndex: (theme) => theme.zIndex.drawer + 1,
+          background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+          backdropFilter: 'blur(10px)',
         }}
       >
-        <Toolbar sx={{ minHeight: { xs: 56, sm: 64 } }}>
+        <Toolbar sx={{ 
+          minHeight: { xs: 64, sm: 72 },
+          px: { xs: 2, sm: 3 },
+          py: 1
+        }}>
+          {/* Mobile Menu Button */}
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={() => dispatch(toggleSidebar())}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            sx={{ 
+              mr: 2, 
+              display: { sm: 'none' },
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              }
+            }}
           >
             <MenuIcon />
           </IconButton>
           
-          <Typography 
-            variant="h6" 
-            noWrap 
-            component="div" 
-            sx={{ 
-              flexGrow: 1,
-              fontSize: { xs: '1rem', sm: '1.25rem' },
-              display: { xs: 'none', sm: 'block' }
-            }}
-          >
-            Sistema de Monitoreo Energético
-          </Typography>
+          {/* Logo and Title */}
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            flexGrow: 1,
+            minWidth: 0
+          }}>
+            <Box sx={{ 
+              display: 'flex', 
+              alignItems: 'center',
+              mr: 3
+            }}>
+              <Box sx={{
+                width: 40,
+                height: 40,
+                borderRadius: 2,
+                background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                mr: 2,
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+              }}>
+                <Typography variant="h6" sx={{ 
+                  color: 'white', 
+                  fontWeight: 'bold',
+                  fontSize: '1.2rem'
+                }}>
+                  ⚡
+                </Typography>
+              </Box>
+              <Box>
+                <Typography 
+                  variant="h6" 
+                  noWrap 
+                  component="div" 
+                  sx={{ 
+                    fontSize: { xs: '1rem', sm: '1.3rem' },
+                    fontWeight: 600,
+                    display: { xs: 'none', sm: 'block' },
+                    background: 'linear-gradient(45deg, #ffffff, #e3f2fd)',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                >
+                  Sistema de Monitoreo Energético
+                </Typography>
+                <Typography 
+                  variant="body2" 
+                  sx={{ 
+                    fontSize: '0.75rem',
+                    color: 'rgba(255, 255, 255, 0.8)',
+                    display: { xs: 'none', sm: 'block' }
+                  }}
+                >
+                  Dashboard Inteligente
+                </Typography>
+              </Box>
+            </Box>
 
-          <Typography 
-            variant="h6" 
-            noWrap 
-            component="div" 
-            sx={{ 
-              flexGrow: 1,
-              fontSize: '0.9rem',
-              display: { xs: 'block', sm: 'none' }
-            }}
-          >
-            S.M.E.
-          </Typography>
+            {/* Mobile Title */}
+            <Typography 
+              variant="h6" 
+              noWrap 
+              component="div" 
+              sx={{ 
+                fontSize: '1rem',
+                fontWeight: 600,
+                display: { xs: 'block', sm: 'none' },
+                color: 'white'
+              }}
+            >
+              S.M.E.
+            </Typography>
+          </Box>
 
+          {/* Search Bar */}
           <Box sx={{ 
             flexGrow: 1, 
             maxWidth: { xs: 200, sm: 400 }, 
             mx: { xs: 1, sm: 2 },
             display: { xs: 'none', md: 'block' }
           }}>
-            <GlobalSearch />
+            <HeaderSearch />
           </Box>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.5, sm: 1 } }}>
+          {/* Action Buttons */}
+          <Box sx={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            gap: 0.5
+          }}>
+            {/* Theme Toggle */}
             <IconButton 
               color="inherit" 
               onClick={() => dispatch(toggleTheme())}
-              size="small"
+              size="medium"
+              sx={{
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  transform: 'scale(1.05)',
+                },
+                transition: 'all 0.2s ease-in-out',
+                width: 44,
+                height: 44,
+              }}
             >
               {appTheme === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
             </IconButton>
 
-            <IconButton color="inherit" size="small">
+            {/* Notifications */}
+            <IconButton 
+              color="inherit" 
+              size="medium"
+              sx={{
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  transform: 'scale(1.05)',
+                },
+                transition: 'all 0.2s ease-in-out',
+                width: 44,
+                height: 44,
+                position: 'relative',
+              }}
+            >
               <NotificationsIcon />
+              {/* Notification Badge */}
+              <Box sx={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                width: 8,
+                height: 8,
+                borderRadius: '50%',
+                backgroundColor: '#ff4444',
+                border: '2px solid white'
+              }} />
             </IconButton>
 
-            <IconButton color="inherit" onClick={handleLogout} size="small">
+            {/* User Profile */}
+            <IconButton 
+              color="inherit" 
+              onClick={handleLogout} 
+              size="medium"
+              sx={{
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  transform: 'scale(1.05)',
+                },
+                transition: 'all 0.2s ease-in-out',
+                width: 44,
+                height: 44,
+                ml: 1
+              }}
+            >
               <AccountIcon />
             </IconButton>
           </Box>
