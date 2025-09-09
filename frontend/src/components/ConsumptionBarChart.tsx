@@ -99,7 +99,7 @@ const ConsumptionBarChart: React.FC<ConsumptionBarChartProps> = ({ data }) => {
           padding: 20,
           font: {
             size: 12,
-            weight: '500' as const,
+            weight: 'normal' as const,
           },
         },
       },
@@ -130,7 +130,7 @@ const ConsumptionBarChart: React.FC<ConsumptionBarChartProps> = ({ data }) => {
         ticks: {
           font: {
             size: 11,
-            weight: '500' as const,
+            weight: 'normal' as const,
           },
         },
       },
@@ -142,7 +142,7 @@ const ConsumptionBarChart: React.FC<ConsumptionBarChartProps> = ({ data }) => {
         ticks: {
           font: {
             size: 11,
-            weight: '500' as const,
+            weight: 'normal' as const,
           },
           callback: function(value: any) {
             return value.toLocaleString();

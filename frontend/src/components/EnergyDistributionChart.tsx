@@ -104,7 +104,7 @@ const EnergyDistributionChart: React.FC<EnergyDistributionChartProps> = ({ data 
           padding: 20,
           font: {
             size: 12,
-            weight: '500' as const,
+            weight: 'normal' as const,
           },
           generateLabels: (chart: any) => {
             const data = chart.data;
