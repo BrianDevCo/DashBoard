@@ -322,7 +322,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: { xs: 1, sm: 2, md: 3 },
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           mt: { xs: 7, sm: 8, md: 10 }, // Responsive margin-top
           minHeight: 'calc(100vh - 64px)', // Altura completa menos el header
@@ -330,7 +329,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           overflowY: 'auto', // Scroll vertical
           overflowX: 'hidden', // Sin scroll horizontal
           position: 'relative',
-          // Asegurar que el scroll llegue hasta la derecha
+          // Scrollbar que llega hasta el borde derecho
           '&::-webkit-scrollbar': {
             width: '8px',
           },
@@ -346,7 +345,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           },
         }}
       >
-        {children}
+        {/* Contenedor interno con padding */}
+        <Box sx={{ p: { xs: 1, sm: 2, md: 3 } }}>
+          {children}
+        </Box>
       </Box>
     </Box>
   );
