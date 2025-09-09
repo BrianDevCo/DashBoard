@@ -14,6 +14,9 @@ import {
 } from '@mui/icons-material';
 import EnergyChart from '../components/EnergyChart';
 import MetricCard from '../components/MetricCard';
+import ConsumptionBarChart from '../components/ConsumptionBarChart';
+import EnergyDistributionChart from '../components/EnergyDistributionChart';
+import TrendAreaChart from '../components/TrendAreaChart';
 
 // Datos simulados directamente en el componente para evitar problemas de caché
 const mockData = {
@@ -204,14 +207,129 @@ const Dashboard: React.FC = () => {
         </Grid>
       )}
 
-      {/* Gráfico de Consumo */}
+      {/* Gráficos de Análisis Energético */}
       <Grid container spacing={3}>
+        {/* Gráfico de Barras - Consumo por Ubicación */}
+        <Grid item xs={12} lg={8}>
+          <Card sx={{ 
+            height: '100%',
+            background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+            border: '1px solid rgba(0,0,0,0.05)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                <Box sx={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 2,
+                  background: 'linear-gradient(45deg, #2196f3, #21cbf3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mr: 2,
+                }}>
+                  <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>
+                    📊
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography variant="h6" fontWeight="bold" gutterBottom>
+                    Consumo por Ubicación
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Análisis comparativo de consumo energético
+                  </Typography>
+                </Box>
+              </Box>
+              <ConsumptionBarChart data={realTimeMetrics || []} />
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Gráfico de Distribución - Eficiencia */}
+        <Grid item xs={12} lg={4}>
+          <Card sx={{ 
+            height: '100%',
+            background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+            border: '1px solid rgba(0,0,0,0.05)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                <Box sx={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 2,
+                  background: 'linear-gradient(45deg, #4caf50, #8bc34a)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mr: 2,
+                }}>
+                  <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>
+                    🎯
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography variant="h6" fontWeight="bold" gutterBottom>
+                    Distribución de Eficiencia
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Análisis de eficiencia energética
+                  </Typography>
+                </Box>
+              </Box>
+              <EnergyDistributionChart data={realTimeMetrics || []} />
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Gráfico de Tendencias - Análisis Temporal */}
         <Grid item xs={12}>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                Consumo Energético en Tiempo Real
-              </Typography>
+          <Card sx={{ 
+            background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+            border: '1px solid rgba(0,0,0,0.05)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <TrendAreaChart data={realTimeMetrics || []} />
+            </CardContent>
+          </Card>
+        </Grid>
+
+        {/* Gráfico Original - Tiempo Real */}
+        <Grid item xs={12}>
+          <Card sx={{ 
+            background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
+            border: '1px solid rgba(0,0,0,0.05)',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.08)',
+          }}>
+            <CardContent sx={{ p: 3 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                <Box sx={{
+                  width: 40,
+                  height: 40,
+                  borderRadius: 2,
+                  background: 'linear-gradient(45deg, #ff9800, #ffc107)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  mr: 2,
+                }}>
+                  <Typography variant="h6" sx={{ color: 'white', fontWeight: 'bold' }}>
+                    ⚡
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography variant="h6" fontWeight="bold" gutterBottom>
+                    Consumo Energético en Tiempo Real
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Monitoreo continuo de métricas energéticas
+                  </Typography>
+                </Box>
+              </Box>
               <EnergyChart data={realTimeMetrics || []} />
             </CardContent>
           </Card>
