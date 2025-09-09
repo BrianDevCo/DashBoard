@@ -696,10 +696,11 @@ const ExecutiveDashboard: React.FC = () => {
             </IconButton>
           }
         />
-        {showAlerts && alertsData.length > 0 && (
-          <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
-            <Grid container spacing={{ xs: 1, sm: 2 }}>
-              {alertsData.slice(0, 6).map((alert) => (
+        {showAlerts ? (
+          alertsData.length > 0 ? (
+            <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+              <Grid container spacing={{ xs: 1, sm: 2 }}>
+                {alertsData.slice(0, 6).map((alert) => (
                 <Grid item xs={12} sm={6} md={4} key={alert.id}>
                   <Alert
                     severity={EXECUTIVE_UTILS.getSeverityColor(alert.severity) as any}
@@ -744,6 +745,19 @@ const ExecutiveDashboard: React.FC = () => {
               ))}
             </Grid>
           </CardContent>
+          ) : (
+            <CardContent sx={{ p: { xs: 2, sm: 3 }, textAlign: 'center' }}>
+              <Typography variant="body2" color="text.secondary">
+                No hay alertas disponibles
+              </Typography>
+            </CardContent>
+          )
+        ) : (
+          <CardContent sx={{ p: { xs: 2, sm: 3 }, textAlign: 'center' }}>
+            <Typography variant="body2" color="text.secondary">
+              Sección cerrada - Haz clic en el ícono del ojo para mostrar las alertas
+            </Typography>
+          </CardContent>
         )}
       </Card>
 
@@ -761,10 +775,11 @@ const ExecutiveDashboard: React.FC = () => {
             </IconButton>
           }
         />
-        {showInsights && insightsData.length > 0 && (
-          <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
-            <Grid container spacing={{ xs: 1, sm: 2 }}>
-              {insightsData.slice(0, 6).map((insight) => (
+        {showInsights ? (
+          insightsData.length > 0 ? (
+            <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+              <Grid container spacing={{ xs: 1, sm: 2 }}>
+                {insightsData.slice(0, 6).map((insight) => (
                 <Grid item xs={12} sm={6} md={4} key={insight.id}>
                   <Card variant="outlined" sx={{ height: '100%' }}>
                     <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
@@ -823,6 +838,19 @@ const ExecutiveDashboard: React.FC = () => {
               ))}
             </Grid>
           </CardContent>
+          ) : (
+            <CardContent sx={{ p: { xs: 2, sm: 3 }, textAlign: 'center' }}>
+              <Typography variant="body2" color="text.secondary">
+                No hay insights disponibles
+              </Typography>
+            </CardContent>
+          )
+        ) : (
+          <CardContent sx={{ p: { xs: 2, sm: 3 }, textAlign: 'center' }}>
+            <Typography variant="body2" color="text.secondary">
+              Sección cerrada - Haz clic en el ícono del ojo para mostrar los insights
+            </Typography>
+          </CardContent>
         )}
       </Card>
 
@@ -840,10 +868,11 @@ const ExecutiveDashboard: React.FC = () => {
             </IconButton>
           }
         />
-        {showTrends && trendsData.length > 0 && (
-          <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
-            <Grid container spacing={{ xs: 2, sm: 3 }}>
-              {trendsData.slice(0, 4).map((trend) => (
+        {showTrends ? (
+          trendsData.length > 0 ? (
+            <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+              <Grid container spacing={{ xs: 2, sm: 3 }}>
+                {trendsData.slice(0, 4).map((trend) => (
                 <Grid item xs={12} sm={6} md={3} key={trend.id}>
                   <Card variant="outlined" sx={{ height: '100%' }}>
                     <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
@@ -890,6 +919,19 @@ const ExecutiveDashboard: React.FC = () => {
                 </Grid>
               ))}
             </Grid>
+          </CardContent>
+          ) : (
+            <CardContent sx={{ p: { xs: 2, sm: 3 }, textAlign: 'center' }}>
+              <Typography variant="body2" color="text.secondary">
+                No hay tendencias disponibles
+              </Typography>
+            </CardContent>
+          )
+        ) : (
+          <CardContent sx={{ p: { xs: 2, sm: 3 }, textAlign: 'center' }}>
+            <Typography variant="body2" color="text.secondary">
+              Sección cerrada - Haz clic en el ícono del ojo para mostrar las tendencias
+            </Typography>
           </CardContent>
         )}
       </Card>
