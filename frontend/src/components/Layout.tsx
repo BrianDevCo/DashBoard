@@ -480,10 +480,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               fontSize: '1.5rem'
             }}
           >
-            {user?.name?.charAt(0) || 'U'}
+            {user?.username?.charAt(0) || 'U'}
           </Avatar>
           <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
-            {user?.name || 'Usuario'}
+            {user?.username || 'Usuario'}
           </Typography>
           <Typography 
             variant="body2" 
@@ -500,7 +500,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             Rol: {user?.role}
           </Typography>
         </Box>
-      </Box>
+      </Menu>
     </Fragment>
   );
 
