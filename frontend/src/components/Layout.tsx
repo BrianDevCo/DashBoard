@@ -114,8 +114,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             width: { sm: `calc(100% - ${drawerWidth}px)` },
             ml: { sm: `${drawerWidth}px` },
             zIndex: (theme) => theme.zIndex.drawer + 1,
-            background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            background: appTheme === 'dark' 
+              ? 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)'
+              : 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
+            borderBottom: appTheme === 'dark' 
+              ? '1px solid rgba(255, 255, 255, 0.1)'
+              : '1px solid rgba(255, 255, 255, 0.1)',
             backdropFilter: 'blur(10px)',
           }}
         >
@@ -288,8 +292,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               '& .MuiDrawer-paper': { 
                 boxSizing: 'border-box', 
                 width: drawerWidth,
-                background: 'linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%)',
-                borderRight: '1px solid rgba(0,0,0,0.1)',
+                background: appTheme === 'dark' 
+                  ? 'linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%)'
+                  : 'linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%)',
+                borderRight: appTheme === 'dark' 
+                  ? '1px solid rgba(255, 255, 255, 0.1)'
+                  : '1px solid rgba(0,0,0,0.1)',
               },
             }}
           >
@@ -302,8 +310,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               '& .MuiDrawer-paper': { 
                 boxSizing: 'border-box', 
                 width: drawerWidth,
-                background: 'linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%)',
-                borderRight: '1px solid rgba(0,0,0,0.1)',
+                background: appTheme === 'dark' 
+                  ? 'linear-gradient(180deg, #2a2a2a 0%, #1a1a1a 100%)'
+                  : 'linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%)',
+                borderRight: appTheme === 'dark' 
+                  ? '1px solid rgba(255, 255, 255, 0.1)'
+                  : '1px solid rgba(0,0,0,0.1)',
               },
             }}
             open
@@ -358,7 +370,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             maxHeight: 400,
             mt: 1,
             borderRadius: 2,
-            boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+            boxShadow: appTheme === 'dark' 
+              ? '0 8px 32px rgba(0,0,0,0.5)'
+              : '0 8px 32px rgba(0,0,0,0.12)',
+            background: appTheme === 'dark' 
+              ? 'linear-gradient(145deg, #2a2a2a 0%, #1e1e1e 100%)'
+              : '#ffffff',
+            border: appTheme === 'dark' 
+              ? '1px solid rgba(255, 255, 255, 0.1)'
+              : 'none',
           }
         }}
       >
@@ -465,7 +485,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             width: 280,
             mt: 1,
             borderRadius: 2,
-            boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+            boxShadow: appTheme === 'dark' 
+              ? '0 8px 32px rgba(0,0,0,0.5)'
+              : '0 8px 32px rgba(0,0,0,0.12)',
+            background: appTheme === 'dark' 
+              ? 'linear-gradient(145deg, #2a2a2a 0%, #1e1e1e 100%)'
+              : '#ffffff',
+            border: appTheme === 'dark' 
+              ? '1px solid rgba(255, 255, 255, 0.1)'
+              : 'none',
           }
         }}
       >

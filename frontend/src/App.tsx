@@ -19,87 +19,13 @@ import UserConfig from './components/UserConfig';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 import { useAuth } from './hooks/useAuth';
-import { createTheme } from '@mui/material/styles';
-
-// Función para crear tema dinámico
-const createAppTheme = (mode: 'light' | 'dark') => {
-  return createTheme({
-    palette: {
-      mode,
-      primary: {
-        main: '#1976d2',
-        light: '#42a5f5',
-        dark: '#1565c0',
-      },
-      secondary: {
-        main: '#dc004e',
-        light: '#ff5983',
-        dark: '#9a0036',
-      },
-      background: {
-        default: mode === 'light' ? '#f5f5f5' : '#121212',
-        paper: mode === 'light' ? '#ffffff' : '#1e1e1e',
-      },
-      text: {
-        primary: mode === 'light' ? '#212121' : '#ffffff',
-        secondary: mode === 'light' ? '#757575' : '#b0b0b0',
-      },
-    },
-    typography: {
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-      h1: {
-        fontSize: '2.5rem',
-        fontWeight: 500,
-      },
-      h2: {
-        fontSize: '2rem',
-        fontWeight: 500,
-      },
-      h3: {
-        fontSize: '1.75rem',
-        fontWeight: 500,
-      },
-      h4: {
-        fontSize: '1.5rem',
-        fontWeight: 500,
-      },
-      h5: {
-        fontSize: '1.25rem',
-        fontWeight: 500,
-      },
-      h6: {
-        fontSize: '1rem',
-        fontWeight: 500,
-      },
-    },
-    components: {
-      MuiButton: {
-        styleOverrides: {
-          root: {
-            textTransform: 'none',
-            borderRadius: 8,
-          },
-        },
-      },
-      MuiCard: {
-        styleOverrides: {
-          root: {
-            borderRadius: 12,
-            boxShadow: mode === 'light' 
-              ? '0 2px 8px rgba(0,0,0,0.1)' 
-              : '0 2px 8px rgba(0,0,0,0.3)',
-          },
-        },
-      },
-    },
-  });
-};
+import { lightTheme, darkTheme } from './theme';
 
 function App() {
   const { isAuthenticated } = useAuth();
   const { theme: appTheme } = useSelector((state: RootState) => state.ui);
   
-  const theme = createAppTheme(appTheme);
+  const theme = appTheme === 'dark' ? darkTheme : lightTheme;
 
   if (!isAuthenticated) {
     return (
