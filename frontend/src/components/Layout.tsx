@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import {
   Box,
   Drawer,
@@ -99,12 +99,13 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   return (
-    <Box sx={{ 
-      display: 'flex', 
-      minHeight: '100vh',
-      maxHeight: '100vh', // Altura máxima para evitar scroll en el body
-      overflow: 'hidden' // Evitar scroll en el contenedor principal
-    }}>
+    <Fragment>
+      <Box sx={{ 
+        display: 'flex', 
+        minHeight: '100vh',
+        maxHeight: '100vh', // Altura máxima para evitar scroll en el body
+        overflow: 'hidden' // Evitar scroll en el contenedor principal
+      }}>
       {/* AppBar */}
       <AppBar
         position="fixed"
@@ -362,7 +363,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           {children}
         </Box>
       </Box>
-    </Box>
+      </Box>
+    </Fragment>
   );
 
   function SidebarContent() {
@@ -540,8 +542,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </Typography>
         </Box>
       </Menu>
-    );
-  }
+    </>
+  );
 };
 
 export default Layout;

@@ -157,12 +157,12 @@ const ExecutiveDashboard: React.FC = () => {
 
   // Usar datos simulados completos
   const kpisData = [
-    { id: 1, name: 'Consumo Total', value: 1250000, unit: 'kWh', trend: 5.2, target: 1200000, icon: '⚡', color: '#1976d2' },
-    { id: 2, name: 'Costo Total', value: 75000000, unit: 'COP', trend: 3.8, target: 70000000, icon: '💰', color: '#388e3c' },
-    { id: 3, name: 'Eficiencia', value: 87.5, unit: '%', trend: 2.1, target: 85, icon: '📈', color: '#f57c00' },
-    { id: 4, name: 'Factor de Potencia', value: 0.92, unit: '', trend: -1.2, target: 0.95, icon: '⚡', color: '#d32f2f' },
-    { id: 5, name: 'Ahorro Energético', value: 1250000, unit: 'kWh', trend: 8.5, target: 1000000, icon: '🌱', color: '#7b1fa2' },
-    { id: 6, name: 'CO2 Reducido', value: 450, unit: 'ton', trend: 12.3, target: 400, icon: '🌍', color: '#00796b' }
+    { id: 1, name: 'Consumo Total', title: 'Consumo Total', value: 1250000, unit: 'kWh', trend: 5.2, change: 5.2, changeType: 'up', target: 1200000, icon: '⚡', color: '#1976d2', status: 'good', period: 'Este Mes' },
+    { id: 2, name: 'Costo Total', title: 'Costo Total', value: 75000000, unit: 'COP', trend: 3.8, change: 3.8, changeType: 'up', target: 70000000, icon: '💰', color: '#388e3c', status: 'warning', period: 'Este Mes' },
+    { id: 3, name: 'Eficiencia', title: 'Eficiencia', value: 87.5, unit: '%', trend: 2.1, change: 2.1, changeType: 'up', target: 85, icon: '📈', color: '#f57c00', status: 'excellent', period: 'Este Mes' },
+    { id: 4, name: 'Factor de Potencia', title: 'Factor de Potencia', value: 0.92, unit: '', trend: -1.2, change: -1.2, changeType: 'down', target: 0.95, icon: '⚡', color: '#d32f2f', status: 'warning', period: 'Este Mes' },
+    { id: 5, name: 'Ahorro Energético', title: 'Ahorro Energético', value: 1250000, unit: 'kWh', trend: 8.5, change: 8.5, changeType: 'up', target: 1000000, icon: '🌱', color: '#7b1fa2', status: 'excellent', period: 'Este Mes' },
+    { id: 6, name: 'CO2 Reducido', title: 'CO2 Reducido', value: 450, unit: 'ton', trend: 12.3, change: 12.3, changeType: 'up', target: 400, icon: '🌍', color: '#00796b', status: 'excellent', period: 'Este Mes' }
   ];
   
   const alertsData = [
@@ -193,12 +193,12 @@ const ExecutiveDashboard: React.FC = () => {
   };
   
   const insightsData = [
-    { id: 1, name: 'Optimización de Motores', type: 'efficiency', priority: 'high', impact: 'Alto', description: 'Implementar variadores de frecuencia en motores principales', savings: 150000, status: 'pending' },
-    { id: 2, name: 'Iluminación LED', type: 'consumption', priority: 'medium', impact: 'Medio', description: 'Reemplazar iluminación convencional por LED', savings: 80000, status: 'in_progress' },
-    { id: 3, name: 'Control de Demanda', type: 'peak', priority: 'high', impact: 'Alto', description: 'Sistema de gestión de picos de demanda', savings: 200000, status: 'completed' },
-    { id: 4, name: 'Climatización Inteligente', type: 'hvac', priority: 'medium', impact: 'Medio', description: 'Sistema de control automático de temperatura', savings: 120000, status: 'pending' },
-    { id: 5, name: 'Monitoreo en Tiempo Real', type: 'monitoring', priority: 'low', impact: 'Bajo', description: 'Dashboard de monitoreo continuo', savings: 50000, status: 'completed' },
-    { id: 6, name: 'Compensación Reactiva', type: 'power_factor', priority: 'high', impact: 'Alto', description: 'Instalación de bancos de capacitores', savings: 180000, status: 'in_progress' }
+    { id: 1, name: 'Optimización de Motores', type: 'efficiency', priority: 'high', impact: 'Alto', description: 'Implementar variadores de frecuencia en motores principales', savings: 150000, status: 'pending', consumption: 450000, efficiency: 92.3, trend: 'up' },
+    { id: 2, name: 'Iluminación LED', type: 'consumption', priority: 'medium', impact: 'Medio', description: 'Reemplazar iluminación convencional por LED', savings: 80000, status: 'in_progress', consumption: 350000, efficiency: 88.7, trend: 'down' },
+    { id: 3, name: 'Control de Demanda', type: 'peak', priority: 'high', impact: 'Alto', description: 'Sistema de gestión de picos de demanda', savings: 200000, status: 'completed', consumption: 280000, efficiency: 85.4, trend: 'stable' },
+    { id: 4, name: 'Climatización Inteligente', type: 'hvac', priority: 'medium', impact: 'Medio', description: 'Sistema de control automático de temperatura', savings: 120000, status: 'pending', consumption: 200000, efficiency: 82.1, trend: 'up' },
+    { id: 5, name: 'Monitoreo en Tiempo Real', type: 'monitoring', priority: 'low', impact: 'Bajo', description: 'Dashboard de monitoreo continuo', savings: 50000, status: 'completed', consumption: 75000, efficiency: 95.2, trend: 'stable' },
+    { id: 6, name: 'Compensación Reactiva', type: 'power_factor', priority: 'high', impact: 'Alto', description: 'Instalación de bancos de capacitores', savings: 180000, status: 'in_progress', consumption: 120000, efficiency: 79.8, trend: 'up' }
   ];
   
   const statsData = [
@@ -297,7 +297,7 @@ const ExecutiveDashboard: React.FC = () => {
       activeAlerts: alertsData.filter(a => a.severity === 'high').length,
       criticalAlerts: alertsData.filter(a => a.severity === 'high').length,
       totalInsights: insightsData.length,
-      highPriorityInsights: insightsData.filter(i => i.trend === 'up').length,
+      highPriorityInsights: insightsData.filter(i => i.priority === 'high').length,
       totalTrends: trendsData.length,
     };
   };
