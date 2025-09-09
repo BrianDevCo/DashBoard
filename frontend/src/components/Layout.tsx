@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Drawer,
@@ -13,6 +13,11 @@ import {
   ListItemIcon,
   ListItemText,
   useTheme,
+  Menu,
+  MenuItem,
+  Badge,
+  Chip,
+  Avatar,
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -52,6 +57,21 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const dispatch = useDispatch<AppDispatch>();
   const { sidebarOpen, theme: appTheme } = useSelector((state: RootState) => state.ui);
   const { user, logout } = useAuth();
+  
+  // Estados para notificaciones
+  const [notificationAnchor, setNotificationAnchor] = useState<null | HTMLElement>(null);
+  const [profileAnchor, setProfileAnchor] = useState<null | HTMLElement>(null);
+  
+  // Datos mock de notificaciones
+  const notifications = [
+    { id: 1, title: 'Pico de demanda excedido', message: 'Planta Norte - 4,850 kW', time: 'Hace 5 min', type: 'warning', read: false },
+    { id: 2, title: 'Factor de potencia bajo', message: 'Centro de Datos - 0.82', time: 'Hace 15 min', type: 'error', read: false },
+    { id: 3, title: 'Mantenimiento completado', message: 'Sistema UPS actualizado', time: 'Hace 1 hora', type: 'success', read: true },
+    { id: 4, title: 'Nueva alerta crítica', message: 'Sobrecarga transformador', time: 'Hace 2 horas', type: 'error', read: false },
+    { id: 5, title: 'Meta de eficiencia alcanzada', message: '87.5% - Objetivo superado', time: 'Hace 3 horas', type: 'success', read: true }
+  ];
+  
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   const menuItems = [
     { text: 'Dashboard Ejecutivo', icon: <DashboardIcon />, path: '/' },
@@ -237,6 +257,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <IconButton 
               color="inherit" 
               size="medium"
+              onClick={(e) => setNotificationAnchor(e.currentTarget)}
               sx={{
                 backgroundColor: 'rgba(255, 255, 255, 0.1)',
                 '&:hover': {
@@ -249,18 +270,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                 position: 'relative',
               }}
             >
-              <NotificationsIcon />
-              {/* Notification Badge */}
-              <Box sx={{
-                position: 'absolute',
-                top: 8,
-                right: 8,
-                width: 8,
-                height: 8,
-                borderRadius: '50%',
-                backgroundColor: '#ff4444',
-                border: '2px solid white'
-              }} />
+              <Badge badgeContent={unreadCount} color="error">
+                <NotificationsIcon />
+              </Badge>
             </IconButton>
 
             {/* User Profile */}
@@ -420,6 +432,114 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </Typography>
         </Box>
       </Box>
+      
+      {/* Menú de Notificaciones */}
+      <Menu
+        anchorEl={notificationAnchor}
+        open={Boolean(notificationAnchor)}
+        onClose={() => setNotificationAnchor(null)}
+        PaperProps={{
+          sx: {
+            width: 350,
+            maxHeight: 400,
+            mt: 1,
+            borderRadius: 2,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+          }
+        }}
+      >
+        <Box sx={{ p: 2, borderBottom: 1, borderColor: 'divider' }}>
+          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            Notificaciones
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {unreadCount} sin leer
+          </Typography>
+        </Box>
+        
+        {notifications.map((notification) => (
+          <MenuItem 
+            key={notification.id}
+            sx={{ 
+              p: 2,
+              borderBottom: 1,
+              borderColor: 'divider',
+              backgroundColor: notification.read ? 'transparent' : 'rgba(25, 118, 210, 0.04)',
+              '&:hover': {
+                backgroundColor: 'rgba(25, 118, 210, 0.08)',
+              }
+            }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', width: '100%' }}>
+              <Avatar 
+                sx={{ 
+                  width: 32, 
+                  height: 32, 
+                  mr: 2,
+                  backgroundColor: 
+                    notification.type === 'error' ? '#f44336' :
+                    notification.type === 'warning' ? '#ff9800' :
+                    notification.type === 'success' ? '#4caf50' : '#2196f3'
+                }}
+              >
+                {notification.type === 'error' ? '⚠️' : 
+                 notification.type === 'warning' ? '⚡' : 
+                 notification.type === 'success' ? '✅' : 'ℹ️'}
+              </Avatar>
+              
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography 
+                  variant="subtitle2" 
+                  sx={{ 
+                    fontWeight: notification.read ? 400 : 600,
+                    mb: 0.5 
+                  }}
+                >
+                  {notification.title}
+                </Typography>
+                <Typography 
+                  variant="body2" 
+                  color="text.secondary"
+                  sx={{ mb: 1 }}
+                >
+                  {notification.message}
+                </Typography>
+                <Typography 
+                  variant="caption" 
+                  color="text.secondary"
+                >
+                  {notification.time}
+                </Typography>
+              </Box>
+              
+              {!notification.read && (
+                <Box 
+                  sx={{ 
+                    width: 8, 
+                    height: 8, 
+                    borderRadius: '50%', 
+                    backgroundColor: '#1976d2',
+                    ml: 1
+                  }} 
+                />
+              )}
+            </Box>
+          </MenuItem>
+        ))}
+        
+        <Box sx={{ p: 2, textAlign: 'center' }}>
+          <Typography 
+            variant="body2" 
+            color="primary" 
+            sx={{ 
+              cursor: 'pointer',
+              '&:hover': { textDecoration: 'underline' }
+            }}
+          >
+            Ver todas las notificaciones
+          </Typography>
+        </Box>
+      </Menu>
     );
   }
 };

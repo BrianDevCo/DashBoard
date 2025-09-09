@@ -155,13 +155,59 @@ const ExecutiveDashboard: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('thisMonth');
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  // Usar datos simulados
-  const kpisData = mockExecutiveData.kpis;
-  const alertsData = mockExecutiveData.alerts;
-  const trendsData = mockExecutiveData.trends;
-  const summaryData = mockExecutiveData.summary;
-  const insightsData = mockExecutiveData.topConsumers;
-  const statsData = mockExecutiveData.consumptionByCategory;
+  // Usar datos simulados completos
+  const kpisData = [
+    { id: 1, name: 'Consumo Total', value: 1250000, unit: 'kWh', trend: 5.2, target: 1200000, icon: '⚡', color: '#1976d2' },
+    { id: 2, name: 'Costo Total', value: 75000000, unit: 'COP', trend: 3.8, target: 70000000, icon: '💰', color: '#388e3c' },
+    { id: 3, name: 'Eficiencia', value: 87.5, unit: '%', trend: 2.1, target: 85, icon: '📈', color: '#f57c00' },
+    { id: 4, name: 'Factor de Potencia', value: 0.92, unit: '', trend: -1.2, target: 0.95, icon: '⚡', color: '#d32f2f' },
+    { id: 5, name: 'Ahorro Energético', value: 1250000, unit: 'kWh', trend: 8.5, target: 1000000, icon: '🌱', color: '#7b1fa2' },
+    { id: 6, name: 'CO2 Reducido', value: 450, unit: 'ton', trend: 12.3, target: 400, icon: '🌍', color: '#00796b' }
+  ];
+  
+  const alertsData = [
+    { id: 1, severity: 'high', message: 'Pico de demanda excedido en Planta Norte', time: '14:30', location: 'Planta Norte', value: 4850, threshold: 4500, unit: 'kW' },
+    { id: 2, severity: 'medium', message: 'Factor de potencia bajo en Centro de Datos', time: '10:15', location: 'Centro de Datos', value: 0.82, threshold: 0.85, unit: '' },
+    { id: 3, severity: 'low', message: 'Mantenimiento programado completado', time: '08:00', location: 'Sistema General', value: 0, threshold: 0, unit: '' },
+    { id: 4, severity: 'high', message: 'Sobrecarga en transformador principal', time: '16:45', location: 'Subestación', value: 95, threshold: 90, unit: '%' },
+    { id: 5, severity: 'medium', message: 'Temperatura elevada en equipos', time: '13:20', location: 'Planta Norte', value: 52, threshold: 50, unit: '°C' },
+    { id: 6, severity: 'low', message: 'Meta de eficiencia alcanzada', time: '12:00', location: 'Sistema General', value: 87.5, threshold: 85, unit: '%' }
+  ];
+  
+  const trendsData = [
+    { id: 1, period: 'Enero 2024', consumption: 1200000, cost: 72000000, efficiency: 85.2, trend: 'up' },
+    { id: 2, period: 'Febrero 2024', consumption: 1150000, cost: 69000000, efficiency: 86.8, trend: 'down' },
+    { id: 3, period: 'Marzo 2024', consumption: 1300000, cost: 78000000, efficiency: 88.1, trend: 'up' },
+    { id: 4, period: 'Abril 2024', consumption: 1250000, cost: 75000000, efficiency: 87.5, trend: 'stable' }
+  ];
+  
+  const summaryData = {
+    totalEnergy: 1250000,
+    totalCost: 75000000,
+    efficiency: 87.5,
+    savings: 1250000,
+    co2Reduction: 450,
+    powerFactor: 0.92,
+    peakDemand: 4800,
+    avgDemand: 2600
+  };
+  
+  const insightsData = [
+    { id: 1, name: 'Optimización de Motores', type: 'efficiency', priority: 'high', impact: 'Alto', description: 'Implementar variadores de frecuencia en motores principales', savings: 150000, status: 'pending' },
+    { id: 2, name: 'Iluminación LED', type: 'consumption', priority: 'medium', impact: 'Medio', description: 'Reemplazar iluminación convencional por LED', savings: 80000, status: 'in_progress' },
+    { id: 3, name: 'Control de Demanda', type: 'peak', priority: 'high', impact: 'Alto', description: 'Sistema de gestión de picos de demanda', savings: 200000, status: 'completed' },
+    { id: 4, name: 'Climatización Inteligente', type: 'hvac', priority: 'medium', impact: 'Medio', description: 'Sistema de control automático de temperatura', savings: 120000, status: 'pending' },
+    { id: 5, name: 'Monitoreo en Tiempo Real', type: 'monitoring', priority: 'low', impact: 'Bajo', description: 'Dashboard de monitoreo continuo', savings: 50000, status: 'completed' },
+    { id: 6, name: 'Compensación Reactiva', type: 'power_factor', priority: 'high', impact: 'Alto', description: 'Instalación de bancos de capacitores', savings: 180000, status: 'in_progress' }
+  ];
+  
+  const statsData = [
+    { category: 'Iluminación LED', consumption: 350000, percentage: 28.0, cost: 21000000, efficiency: 92.5, trend: 'down', savings: 1500000 },
+    { category: 'Climatización HVAC', consumption: 420000, percentage: 33.6, cost: 25200000, efficiency: 85.2, trend: 'stable', savings: 800000 },
+    { category: 'Equipos Industriales', consumption: 300000, percentage: 24.0, cost: 18000000, efficiency: 88.7, trend: 'up', savings: 500000 },
+    { category: 'Sistemas de Control', consumption: 120000, percentage: 9.6, cost: 7200000, efficiency: 95.8, trend: 'stable', savings: 200000 },
+    { category: 'Otros Consumos', consumption: 60000, percentage: 4.8, cost: 3600000, efficiency: 78.5, trend: 'down', savings: 100000 }
+  ];
 
   // Mutations
   const [refreshExecutiveData] = useRefreshExecutiveDataMutation();
