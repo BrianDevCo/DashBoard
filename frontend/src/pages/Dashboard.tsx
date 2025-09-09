@@ -15,43 +15,44 @@ import {
   Warning as WarningIcon,
   CheckCircle as CheckCircleIcon,
 } from '@mui/icons-material';
-import { useGetRealTimeMetricsQuery, useGetEnergySummaryQuery, useGetAlertsQuery } from '../services/energyApi';
 import EnergyChart from '../components/EnergyChart';
 import MetricCard from '../components/MetricCard';
-import { mockEnergyData } from '../data/mockData';
+
+// Datos simulados directamente en el componente para evitar problemas de caché
+const mockData = {
+  realTimeMetrics: [
+    { id: '1', timestamp: '2024-01-15T10:30:00Z', kWhD: 1250, kVarhD: 320, kWhR: 50, kVarhR: 15, kVarhPenalized: 25, obisCode: '1.8.0', meterId: 'M001', location: 'Planta Norte' },
+    { id: '2', timestamp: '2024-01-15T10:30:00Z', kWhD: 980, kVarhD: 280, kWhR: 30, kVarhR: 10, kVarhPenalized: 20, obisCode: '1.8.0', meterId: 'M002', location: 'Oficinas Centrales' },
+    { id: '3', timestamp: '2024-01-15T10:30:00Z', kWhD: 2100, kVarhD: 450, kWhR: 80, kVarhR: 25, kVarhPenalized: 35, obisCode: '1.8.0', meterId: 'M003', location: 'Centro de Datos' }
+  ],
+  energySummary: {
+    totalImported: 1250000,
+    totalExported: 45000,
+    totalReactive: 320000,
+    totalPenalized: 25000,
+    efficiency: 87.5,
+    cost: 75000000,
+    savings: 1250000,
+    powerFactor: 0.92,
+    reactivePercentage: 25.6,
+    maxDemand: 4800,
+    avgDemand: 2600,
+    minDemand: 1200
+  },
+  alerts: [
+    { id: 1, type: 'warning', message: 'Consumo alto en hora pico', timestamp: '2024-01-01T19:00:00Z', severity: 'medium', resolved: false },
+    { id: 2, type: 'info', message: 'Factor de potencia optimizado', timestamp: '2024-01-01T15:30:00Z', severity: 'low', resolved: true },
+    { id: 3, type: 'success', message: 'Meta de eficiencia alcanzada', timestamp: '2024-01-01T12:00:00Z', severity: 'low', resolved: true }
+  ]
+};
 
 const Dashboard: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<'day' | 'week' | 'month'>('day');
   
-  // Usar datos simulados en lugar de la API
-  const realTimeMetrics = mockEnergyData.realTimeMetrics;
-  const energySummary = mockEnergyData.energySummary;
-  const alerts = mockEnergyData.alerts;
-  const isLoadingMetrics = false;
-  const isLoadingSummary = false;
-  const isLoadingAlerts = false;
-  const metricsError = null;
-
-  // Comentamos las consultas a la API para evitar errores
-  // const { data: realTimeMetrics, isLoading: isLoadingMetrics, error: metricsError } = useGetRealTimeMetricsQuery();
-  // const { data: energySummary, isLoading: isLoadingSummary } = useGetEnergySummaryQuery({ period: selectedPeriod });
-  // const { data: alerts, isLoading: isLoadingAlerts } = useGetAlertsQuery();
-
-  if (isLoadingMetrics || isLoadingSummary) {
-    return (
-      <Box display="flex" justifyContent="center" alignItems="center" minHeight="400px">
-        <CircularProgress />
-      </Box>
-    );
-  }
-
-  if (metricsError) {
-    return (
-      <Alert severity="error" sx={{ mb: 2 }}>
-        Error al cargar los datos del dashboard
-      </Alert>
-    );
-  }
+  // Usar datos simulados directamente
+  const realTimeMetrics = mockData.realTimeMetrics;
+  const energySummary = mockData.energySummary;
+  const alerts = mockData.alerts;
 
   return (
     <Box>
