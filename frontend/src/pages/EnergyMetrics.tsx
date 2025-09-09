@@ -51,12 +51,18 @@ const EnergyMetrics: React.FC = () => {
   const generateMockHistoricalData = () => {
     const data = [];
     const now = new Date();
+    const locations = ['Planta Norte', 'Oficinas Centrales', 'Centro de Datos', 'Almacén Principal'];
+    const obisCodes = ['1.0.1.8.0', '1.0.2.8.0', '1.0.3.8.0', '1.0.4.8.0'];
+    
     for (let i = 0; i < 24; i++) {
       const date = new Date(now.getTime() - i * 60 * 60 * 1000);
+      const meterIndex = selectedMeter === 'all' ? 0 : parseInt(selectedMeter) - 1;
       data.push({
         id: i.toString(),
         timestamp: date.toISOString(),
         meterId: selectedMeter === 'all' ? '1' : selectedMeter,
+        obisCode: obisCodes[meterIndex] || '1.0.1.8.0',
+        location: locations[meterIndex] || 'Planta Norte',
         kWhD: Math.random() * 1000 + 500,
         kVarhD: Math.random() * 200 + 100,
         kWhR: Math.random() * 50 + 25,
@@ -81,27 +87,34 @@ const EnergyMetrics: React.FC = () => {
 
   const chartData = historicalMetrics;
 
-  const billingComparison = {
-    billing: {
-      totalCost: 1250000,
-      energyCost: 980000,
-      demandCost: 200000,
-      reactiveCost: 70000,
-      period: 'Último mes'
-    },
-    consumption: {
-      totalKWh: 45000,
-      peakDemand: 1200,
-      averageDemand: 600,
-      powerFactor: 0.92
-    },
-    variance: {
-      costVariance: 5.2,
-      consumptionVariance: -2.1,
-      efficiencyVariance: 8.5
-    },
-    costPerKWh: 27.8
+  // Generar datos de facturación mock en el formato correcto
+  const generateMockBillingData = () => {
+    const data = [];
+    for (let i = 0; i < 12; i++) {
+      const date = new Date();
+      date.setMonth(date.getMonth() - i);
+      data.push({
+        id: i.toString(),
+        period: date.toISOString().substring(0, 7), // YYYY-MM
+        totalCost: Math.random() * 500000 + 1000000,
+        energyCost: Math.random() * 400000 + 800000,
+        demandCost: Math.random() * 100000 + 150000,
+        reactiveCost: Math.random() * 50000 + 50000,
+        totalKWh: Math.random() * 10000 + 40000,
+        peakDemand: Math.random() * 200 + 1000,
+        averageDemand: Math.random() * 100 + 500,
+        powerFactor: 0.85 + Math.random() * 0.15,
+        costPerKWh: 20 + Math.random() * 15,
+        variance: Math.random() * 20 - 10, // -10% a +10%
+      });
+    }
+    return data;
   };
+
+  const billingData = generateMockBillingData();
+  const consumptionData = historicalMetrics; // Usar los mismos datos históricos
+  const variance = 5.2; // Variación como número simple
+  const costPerKWh = 27.8;
 
   const isLoadingMeters = false;
   const isLoadingHistorical = false;
@@ -292,10 +305,10 @@ const EnergyMetrics: React.FC = () => {
               </Box>
             ) : (
               <BillingComparison
-                billingData={billingComparison.billing}
-                consumptionData={billingComparison.consumption}
-                variance={billingComparison.variance}
-                costPerKWh={billingComparison.costPerKWh}
+                billingData={billingData}
+                consumptionData={consumptionData}
+                variance={variance}
+                costPerKWh={costPerKWh}
                 period={selectedInterval}
               />
             )}
