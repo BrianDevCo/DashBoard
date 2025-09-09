@@ -90,6 +90,9 @@ const EnergyMetrics: React.FC = () => {
   // Generar datos de facturación mock en el formato correcto
   const generateMockBillingData = () => {
     const data = [];
+    const locations = ['Planta Principal', 'Edificio A', 'Edificio B', 'Almacén Central'];
+    const meterIds = ['MTR-001', 'MTR-002', 'MTR-003', 'MTR-004'];
+    
     for (let i = 0; i < 12; i++) {
       const date = new Date();
       date.setMonth(date.getMonth() - i);
@@ -107,6 +110,8 @@ const EnergyMetrics: React.FC = () => {
         energyCost: Math.random() * 400000 + 800000,
         reactiveCost: Math.random() * 50000 + 50000,
         taxes: Math.random() * 100000 + 200000,
+        meterId: meterIds[i % meterIds.length],
+        location: locations[i % locations.length],
       });
     }
     return data;
