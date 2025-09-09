@@ -106,263 +106,245 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         maxHeight: '100vh', // Altura máxima para evitar scroll en el body
         overflow: 'hidden' // Evitar scroll en el contenedor principal
       }}>
-      {/* AppBar */}
-      <AppBar
-        position="fixed"
-        elevation={0}
-        sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
-          zIndex: (theme) => theme.zIndex.drawer + 1,
-          background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-          backdropFilter: 'blur(10px)',
-        }}
-      >
-        <Toolbar sx={{ 
-          minHeight: { xs: 64, sm: 72 },
-          px: { xs: 2, sm: 3 },
-          py: 1
-        }}>
-          {/* Mobile Menu Button */}
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={() => dispatch(toggleSidebar())}
-            sx={{ 
-              mr: 2, 
-              display: { sm: 'none' },
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              '&:hover': {
-                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-              }
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          
-          {/* Logo and Title */}
-          <Box sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            flexGrow: 1,
-            minWidth: 0
+        {/* AppBar */}
+        <AppBar
+          position="fixed"
+          elevation={0}
+          sx={{
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            ml: { sm: `${drawerWidth}px` },
+            zIndex: (theme) => theme.zIndex.drawer + 1,
+            background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            backdropFilter: 'blur(10px)',
+          }}
+        >
+          <Toolbar sx={{ 
+            minHeight: { xs: 64, sm: 72 },
+            px: { xs: 2, sm: 3 },
+            py: 1
           }}>
+            {/* Mobile Menu Button */}
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={() => dispatch(toggleSidebar())}
+              sx={{ 
+                mr: 2, 
+                display: { sm: 'none' },
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                '&:hover': {
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                }
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+            
+            {/* Logo and Title */}
             <Box sx={{ 
               display: 'flex', 
-              alignItems: 'center',
-              mr: 3
+              alignItems: 'center', 
+              flexGrow: 1,
+              mr: 2
             }}>
               <Box sx={{
-                width: 40,
-                height: 40,
-                borderRadius: 2,
-                background: 'linear-gradient(45deg, #ff6b6b, #4ecdc4)',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
                 mr: 2,
-                boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                p: 1,
+                borderRadius: 2,
+                background: 'rgba(255, 255, 255, 0.15)',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
               }}>
-                <Typography variant="h6" sx={{ 
-                  color: 'white', 
-                  fontWeight: 'bold',
-                  fontSize: '1.2rem'
-                }}>
+                <Typography 
+                  variant="h5" 
+                  sx={{ 
+                    fontSize: { xs: '1.5rem', sm: '1.75rem' },
+                    fontWeight: 'bold',
+                    background: 'linear-gradient(45deg, #fff 30%, #e3f2fd 90%)',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    textShadow: '0 2px 4px rgba(0,0,0,0.3)',
+                  }}
+                >
                   ⚡
                 </Typography>
               </Box>
+              
               <Box>
                 <Typography 
                   variant="h6" 
                   noWrap 
-                  component="div" 
+                  component="div"
                   sx={{ 
-                    fontSize: { xs: '1rem', sm: '1.3rem' },
+                    fontSize: { xs: '1.1rem', sm: '1.25rem' },
                     fontWeight: 600,
-                    display: { xs: 'none', sm: 'block' },
-                    background: 'linear-gradient(45deg, #ffffff, #e3f2fd)',
+                    background: 'linear-gradient(45deg, #fff 30%, #e3f2fd 90%)',
                     backgroundClip: 'text',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
+                    textShadow: '0 2px 4px rgba(0,0,0,0.3)',
                   }}
                 >
-                  Sistema de Monitoreo Energético
+                  Dashboard Energético
                 </Typography>
                 <Typography 
-                  variant="body2" 
+                  variant="caption" 
                   sx={{ 
-                    fontSize: '0.75rem',
+                    display: { xs: 'none', sm: 'block' },
                     color: 'rgba(255, 255, 255, 0.8)',
-                    display: { xs: 'none', sm: 'block' }
+                    fontSize: '0.75rem',
+                    fontWeight: 400
                   }}
                 >
-                  Dashboard Inteligente
+                  Monitoreo Inteligente de Energía
                 </Typography>
               </Box>
             </Box>
 
-            {/* Mobile Title */}
-            <Typography 
-              variant="h6" 
-              noWrap 
-              component="div" 
-              sx={{ 
-                fontSize: '1rem',
-                fontWeight: 600,
-                display: { xs: 'block', sm: 'none' },
-                color: 'white'
-              }}
-            >
-              S.M.E.
-            </Typography>
-          </Box>
+            {/* Search Bar */}
+            <Box sx={{ flexGrow: 1, maxWidth: 400, mx: 2 }}>
+              <HeaderSearch />
+            </Box>
 
-          {/* Search Bar */}
-          <Box sx={{ 
-            flexGrow: 1, 
-            maxWidth: { xs: 200, sm: 400 }, 
-            mx: { xs: 1, sm: 2 },
-            display: { xs: 'none', md: 'block' }
-          }}>
-            <HeaderSearch />
-          </Box>
+            {/* Action Buttons */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              {/* Theme Toggle */}
+              <IconButton
+                color="inherit"
+                onClick={() => dispatch(toggleTheme())}
+                sx={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  width: { xs: 36, sm: 40 },
+                  height: { xs: 36, sm: 40 },
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    transform: 'scale(1.05)',
+                  },
+                  transition: 'all 0.2s ease-in-out',
+                }}
+              >
+                {appTheme === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
+              </IconButton>
 
-          {/* Action Buttons */}
-          <Box sx={{ 
-            display: 'flex', 
-            alignItems: 'center', 
-            gap: 0.5
-          }}>
-            {/* Theme Toggle */}
-            <IconButton 
-              color="inherit" 
-              onClick={() => dispatch(toggleTheme())}
-              size="medium"
-              sx={{
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  transform: 'scale(1.05)',
-                },
-                transition: 'all 0.2s ease-in-out',
-                width: 44,
-                height: 44,
-              }}
-            >
-              {appTheme === 'dark' ? <LightModeIcon /> : <DarkModeIcon />}
-            </IconButton>
+              {/* Notifications */}
+              <IconButton
+                color="inherit"
+                onClick={(e) => setNotificationAnchor(e.currentTarget)}
+                sx={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  width: { xs: 36, sm: 40 },
+                  height: { xs: 36, sm: 40 },
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    transform: 'scale(1.05)',
+                  },
+                  transition: 'all 0.2s ease-in-out',
+                }}
+              >
+                <Badge badgeContent={unreadCount} color="error">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
 
-            {/* Notifications */}
-            <IconButton 
-              color="inherit" 
-              size="medium"
-              onClick={(e) => setNotificationAnchor(e.currentTarget)}
-              sx={{
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  transform: 'scale(1.05)',
-                },
-                transition: 'all 0.2s ease-in-out',
-                width: 44,
-                height: 44,
-                position: 'relative',
-              }}
-            >
-              <Badge badgeContent={unreadCount} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+              {/* User Profile */}
+              <IconButton
+                color="inherit"
+                onClick={(e) => setProfileAnchor(e.currentTarget)}
+                sx={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  width: { xs: 36, sm: 40 },
+                  height: { xs: 36, sm: 40 },
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                    transform: 'scale(1.05)',
+                  },
+                  transition: 'all 0.2s ease-in-out',
+                }}
+              >
+                <AccountIcon />
+              </IconButton>
+            </Box>
+          </Toolbar>
+        </AppBar>
 
-            {/* User Profile */}
-            <IconButton 
-              color="inherit" 
-              onClick={handleLogout} 
-              size="medium"
-              sx={{
-                backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                '&:hover': {
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  transform: 'scale(1.05)',
-                },
-                transition: 'all 0.2s ease-in-out',
-                width: 44,
-                height: 44,
-                ml: 1
-              }}
-            >
-              <AccountIcon />
-            </IconButton>
-          </Box>
-        </Toolbar>
-      </AppBar>
-
-      {/* Sidebar */}
-      <Box
-        component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-      >
-        <Drawer
-          variant="temporary"
-          open={sidebarOpen}
-          onClose={() => dispatch(toggleSidebar())}
-          ModalProps={{
-            keepMounted: true,
-          }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
+        {/* Drawer */}
+        <Box
+          component="nav"
+          sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
         >
-          <SidebarContent />
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-          }}
-          open
-        >
-          <SidebarContent />
-        </Drawer>
-      </Box>
-
-      {/* Main content */}
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          mt: { xs: 7, sm: 8, md: 10 }, // Responsive margin-top
-          minHeight: 'calc(100vh - 64px)', // Altura completa menos el header
-          maxHeight: 'calc(100vh - 64px)', // Altura máxima
-          overflowY: 'auto', // Scroll vertical
-          overflowX: 'hidden', // Sin scroll horizontal
-          position: 'relative',
-          // Scrollbar que llega hasta el borde derecho
-          '&::-webkit-scrollbar': {
-            width: '8px',
-          },
-          '&::-webkit-scrollbar-track': {
-            background: 'rgba(0,0,0,0.1)',
-          },
-          '&::-webkit-scrollbar-thumb': {
-            background: 'rgba(0,0,0,0.3)',
-            borderRadius: '4px',
-          },
-          '&::-webkit-scrollbar-thumb:hover': {
-            background: 'rgba(0,0,0,0.5)',
-          },
-        }}
-      >
-        {/* Contenedor interno con padding */}
-        <Box sx={{ p: { xs: 1, sm: 2, md: 3 } }}>
-          {children}
+          <Drawer
+            variant="temporary"
+            open={sidebarOpen}
+            onClose={() => dispatch(toggleSidebar())}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
+            }}
+            sx={{
+              display: { xs: 'block', sm: 'none' },
+              '& .MuiDrawer-paper': { 
+                boxSizing: 'border-box', 
+                width: drawerWidth,
+                background: 'linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%)',
+                borderRight: '1px solid rgba(0,0,0,0.1)',
+              },
+            }}
+          >
+            <SidebarContent />
+          </Drawer>
+          <Drawer
+            variant="permanent"
+            sx={{
+              display: { xs: 'none', sm: 'block' },
+              '& .MuiDrawer-paper': { 
+                boxSizing: 'border-box', 
+                width: drawerWidth,
+                background: 'linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%)',
+                borderRight: '1px solid rgba(0,0,0,0.1)',
+              },
+            }}
+            open
+          >
+            <SidebarContent />
+          </Drawer>
         </Box>
-      </Box>
+
+        {/* Main Content */}
+        <Box
+          component="main"
+          sx={{
+            flexGrow: 1,
+            width: { sm: `calc(100% - ${drawerWidth}px)` },
+            mt: { xs: 7, sm: 8, md: 10 }, // Responsive margin-top
+            minHeight: 'calc(100vh - 64px)', // Altura completa menos el header
+            maxHeight: 'calc(100vh - 64px)', // Altura máxima
+            overflowY: 'auto', // Scroll vertical
+            overflowX: 'hidden', // Sin scroll horizontal
+            position: 'relative',
+            // Scrollbar que llega hasta el borde derecho
+            '&::-webkit-scrollbar': {
+              width: '8px',
+            },
+            '&::-webkit-scrollbar-track': {
+              background: 'rgba(0,0,0,0.1)',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              background: 'rgba(0,0,0,0.3)',
+              borderRadius: '4px',
+            },
+            '&::-webkit-scrollbar-thumb:hover': {
+              background: 'rgba(0,0,0,0.5)',
+            },
+          }}
+        >
+          {/* Contenedor interno con padding */}
+          <Box sx={{ p: { xs: 1, sm: 2, md: 3 } }}>
+            {children}
+          </Box>
+        </Box>
       </Box>
       
       {/* Menú de Notificaciones */}
@@ -472,6 +454,53 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </Typography>
         </Box>
       </Menu>
+
+      {/* Menú de Perfil de Usuario */}
+      <Menu
+        anchorEl={profileAnchor}
+        open={Boolean(profileAnchor)}
+        onClose={() => setProfileAnchor(null)}
+        PaperProps={{
+          sx: {
+            width: 280,
+            mt: 1,
+            borderRadius: 2,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+          }
+        }}
+      >
+        <Box sx={{ p: 3, textAlign: 'center', borderBottom: 1, borderColor: 'divider' }}>
+          <Avatar 
+            sx={{ 
+              width: 64, 
+              height: 64, 
+              mx: 'auto', 
+              mb: 2,
+              background: 'linear-gradient(135deg, #1976d2 0%, #1565c0 100%)',
+              fontSize: '1.5rem'
+            }}
+          >
+            {user?.name?.charAt(0) || 'U'}
+          </Avatar>
+          <Typography variant="h6" sx={{ fontWeight: 600, mb: 0.5 }}>
+            {user?.name || 'Usuario'}
+          </Typography>
+          <Typography 
+            variant="body2" 
+            color="text.secondary"
+            sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+          >
+            {user?.email || 'usuario@empresa.com'}
+          </Typography>
+          <Typography 
+            variant="caption" 
+            color="text.secondary"
+            sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
+          >
+            Rol: {user?.role}
+          </Typography>
+        </Box>
+      </Box>
     </Fragment>
   );
 
@@ -542,9 +571,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </Typography>
         </Box>
       </Box>
-    </Fragment>
-  );
+    );
+  }
 };
 
 export default Layout;
-
