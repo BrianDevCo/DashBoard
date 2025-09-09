@@ -284,68 +284,45 @@ const UserConfig: React.FC = () => {
   const [updateAccessibility] = useUpdateAccessibilityMutation();
 
   // Sincronizar datos con el store
+  // Sincronizar datos con el store (solo una vez al montar)
   useEffect(() => {
     if (profileData) {
       dispatch(setProfile(profileData));
       setEditedProfile(profileData);
     }
-  }, [profileData, dispatch]);
-
-  useEffect(() => {
     if (notificationsData) {
       dispatch(setNotifications(notificationsData));
       setEditedNotifications(notificationsData);
     }
-  }, [notificationsData, dispatch]);
-
-  useEffect(() => {
     if (preferencesData) {
       dispatch(setPreferences(preferencesData));
       setEditedPreferences(preferencesData);
     }
-  }, [preferencesData, dispatch]);
-
-  useEffect(() => {
     if (dashboardData) {
       dispatch(setDashboard(dashboardData));
       setEditedDashboard(dashboardData);
     }
-  }, [dashboardData, dispatch]);
-
-  useEffect(() => {
     if (reportsData) {
       dispatch(setReports(reportsData));
       setEditedReports(reportsData);
     }
-  }, [reportsData, dispatch]);
-
-  useEffect(() => {
     if (searchData) {
       dispatch(setSearch(searchData));
       setEditedSearch(searchData);
     }
-  }, [searchData, dispatch]);
-
-  useEffect(() => {
     if (alertsData) {
       dispatch(setAlerts(alertsData));
       setEditedAlerts(alertsData);
     }
-  }, [alertsData, dispatch]);
-
-  useEffect(() => {
     if (privacyData) {
       dispatch(setPrivacy(privacyData));
       setEditedPrivacy(privacyData);
     }
-  }, [privacyData, dispatch]);
-
-  useEffect(() => {
     if (accessibilityData) {
       dispatch(setAccessibility(accessibilityData));
       setEditedAccessibility(accessibilityData);
     }
-  }, [accessibilityData, dispatch]);
+  }, [dispatch]);
 
   const handleSave = async () => {
     try {

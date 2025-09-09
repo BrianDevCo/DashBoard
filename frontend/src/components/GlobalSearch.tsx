@@ -197,35 +197,14 @@ const GlobalSearch: React.FC = () => {
   const [exportSearchResults] = useExportSearchResultsMutation();
 
   // Sincronizar datos con el store
+  // Sincronizar datos con el store (solo una vez al montar)
   useEffect(() => {
-    if (searchData) {
-      dispatch(setCurrentResults(searchData.results));
-    }
-  }, [searchData, dispatch]);
-
-  useEffect(() => {
-    if (suggestionsData) {
-      dispatch(setSuggestions(suggestionsData));
-    }
-  }, [suggestionsData, dispatch]);
-
-  useEffect(() => {
-    if (autocompleteData) {
-      dispatch(setAutocompleteResults(autocompleteData));
-    }
-  }, [autocompleteData, dispatch]);
-
-  useEffect(() => {
-    if (historyData) {
-      // dispatch(setSearchHistory(historyData));
-    }
-  }, [historyData, dispatch]);
-
-  useEffect(() => {
-    if (savedFiltersData) {
-      // dispatch(setSavedFilters(savedFiltersData));
-    }
-  }, [savedFiltersData, dispatch]);
+    if (searchData) dispatch(setCurrentResults(searchData.results));
+    if (suggestionsData) dispatch(setSuggestions(suggestionsData));
+    if (autocompleteData) dispatch(setAutocompleteResults(autocompleteData));
+    // dispatch(setSearchHistory(historyData));
+    // dispatch(setSavedFilters(savedFiltersData));
+  }, [dispatch]);
 
   const handleSearch = async () => {
     if (!searchValue.trim()) return;

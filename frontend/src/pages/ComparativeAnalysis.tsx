@@ -147,25 +147,14 @@ const ComparativeAnalysis: React.FC = () => {
   const [exportComparativeData] = useExportComparativeDataMutation();
 
   // Sincronizar datos con el store
+  // Sincronizar datos con el store (solo una vez al montar)
   useEffect(() => {
     if (comparisonsData) dispatch(setComparisons(comparisonsData));
-  }, [comparisonsData, dispatch]);
-
-  useEffect(() => {
     if (trendsData) dispatch(setTrends(trendsData));
-  }, [trendsData, dispatch]);
-
-  useEffect(() => {
     if (rankingsData) dispatch(setRankings(rankingsData));
-  }, [rankingsData, dispatch]);
-
-  useEffect(() => {
     if (heatmapsData) dispatch(setHeatmaps(heatmapsData));
-  }, [heatmapsData, dispatch]);
-
-  useEffect(() => {
     if (analysesData) dispatch(setAnalyses(analysesData));
-  }, [analysesData, dispatch]);
+  }, [dispatch]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);

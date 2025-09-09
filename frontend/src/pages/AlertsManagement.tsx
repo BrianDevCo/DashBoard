@@ -77,7 +77,7 @@ import {
 import AlertRuleEditor from '../components/AlertRuleEditor';
 import AlertHistory from '../components/AlertHistory';
 import AlertGroups from '../components/AlertGroups';
-import { AlertRule, AlertInstance, AlertGroup, AlertSettings } from '../types/alerts';
+import { AlertRule, AlertInstance, AlertGroup, AlertSettings, NotificationChannel } from '../types/alerts';
 
 const AlertsManagement: React.FC = () => {
   const dispatch = useDispatch();
@@ -95,26 +95,26 @@ const AlertsManagement: React.FC = () => {
       name: 'Factor de Potencia Bajo',
       description: 'Alerta cuando el factor de potencia es menor a 0.85',
       type: 'powerFactor' as const,
-      severity: 'medium' as const,
+      severity: 'high' as const,
       enabled: true,
       conditions: [
         {
           id: 'pf-condition-1',
           metric: 'powerFactor',
-          operator: 'lt',
+          operator: 'lt' as const,
           threshold: 0.85,
           unit: '',
           duration: 300,
         },
       ],
-      notificationChannels: ['email', 'platform'],
+      notificationChannels: ['email', 'platform'] as NotificationChannel[],
       recipients: [
         {
           id: 'recipient-1',
-          type: 'email',
+          type: 'email' as const,
           value: 'admin@empresa.com',
           name: 'Administrador',
-          channels: ['email'],
+          channels: ['email'] as NotificationChannel[],
         },
       ],
       cooldownPeriod: 60,
@@ -133,20 +133,20 @@ const AlertsManagement: React.FC = () => {
         {
           id: 'consumption-condition-1',
           metric: 'kWhD',
-          operator: 'gt',
+          operator: 'gt' as const,
           threshold: 8000,
           unit: 'kWh',
           duration: 30,
         },
       ],
-      notificationChannels: ['email', 'platform', 'sms'],
+      notificationChannels: ['email', 'platform', 'sms'] as NotificationChannel[],
       recipients: [
         {
           id: 'recipient-2',
-          type: 'email',
+          type: 'email' as const,
           value: 'supervisor@empresa.com',
           name: 'Supervisor',
-          channels: ['email', 'sms'],
+          channels: ['email', 'sms'] as NotificationChannel[],
         },
       ],
       cooldownPeriod: 30,
@@ -165,20 +165,20 @@ const AlertsManagement: React.FC = () => {
         {
           id: 'data-condition-1',
           metric: 'dataAvailability',
-          operator: 'eq',
+          operator: 'eq' as const,
           threshold: 0,
           unit: '',
           duration: 15,
         },
       ],
-      notificationChannels: ['email', 'platform'],
+      notificationChannels: ['email', 'platform'] as NotificationChannel[],
       recipients: [
         {
           id: 'recipient-3',
-          type: 'email',
+          type: 'email' as const,
           value: 'tecnico@empresa.com',
           name: 'Técnico',
-          channels: ['email'],
+          channels: ['email'] as NotificationChannel[],
         },
       ],
       cooldownPeriod: 15,
@@ -191,26 +191,26 @@ const AlertsManagement: React.FC = () => {
       name: 'Demanda Alta',
       description: 'Alerta cuando la demanda supera el 90% de la capacidad',
       type: 'demand' as const,
-      severity: 'medium' as const,
+      severity: 'critical' as const,
       enabled: true,
       conditions: [
         {
           id: 'demand-condition-1',
           metric: 'demand',
-          operator: 'gt',
+          operator: 'gt' as const,
           threshold: 900,
           unit: 'kW',
           duration: 60,
         },
       ],
-      notificationChannels: ['email', 'platform'],
+      notificationChannels: ['email', 'platform'] as NotificationChannel[],
       recipients: [
         {
           id: 'recipient-4',
-          type: 'email',
+          type: 'email' as const,
           value: 'supervisor@empresa.com',
           name: 'Supervisor',
-          channels: ['email'],
+          channels: ['email'] as NotificationChannel[],
         },
       ],
       cooldownPeriod: 60,
@@ -225,9 +225,9 @@ const AlertsManagement: React.FC = () => {
       id: 'alert-1',
       ruleId: 'rule-1',
       ruleName: 'Factor de Potencia Bajo',
-      type: 'powerFactor',
-      severity: 'medium',
-      status: 'active',
+      type: 'powerFactor' as const,
+      severity: 'high' as const,
+      status: 'active' as const,
       title: 'Factor de Potencia Bajo Detectado',
       message: 'Factor de potencia en MTR-001: 0.82 (umbral: 0.85)',
       triggeredAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
@@ -249,10 +249,10 @@ const AlertsManagement: React.FC = () => {
       notifications: [
         {
           id: 'notif-1',
-          channel: 'email',
+          channel: 'email' as NotificationChannel,
           recipient: 'admin@empresa.com',
           sentAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-          status: 'sent',
+          status: 'sent' as const,
           retryCount: 0,
         },
       ],
@@ -261,16 +261,16 @@ const AlertsManagement: React.FC = () => {
       id: 'alert-2',
       ruleId: 'rule-2',
       ruleName: 'Consumo Energético Alto',
-      type: 'consumption',
-      severity: 'critical',
-      status: 'acknowledged',
+      type: 'consumption' as const,
+      severity: 'critical' as const,
+      status: 'acknowledged' as const,
       title: 'Consumo Energético Crítico',
       message: 'Consumo energético en MTR-002: 8,450 kWh (umbral: 8,000 kWh)',
       triggeredAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
       acknowledgedAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
       acknowledgedBy: 'admin@empresa.com',
-      resolvedAt: null,
-      resolvedBy: null,
+      resolvedAt: undefined,
+      resolvedBy: undefined,
       data: {
         meterId: 'MTR-002',
         location: 'Edificio A',
@@ -286,18 +286,18 @@ const AlertsManagement: React.FC = () => {
       notifications: [
         {
           id: 'notif-2',
-          channel: 'email',
+          channel: 'email' as NotificationChannel,
           recipient: 'supervisor@empresa.com',
           sentAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-          status: 'sent',
+          status: 'sent' as const,
           retryCount: 0,
         },
         {
           id: 'notif-3',
-          channel: 'sms',
+          channel: 'sms' as NotificationChannel,
           recipient: '+573001234567',
           sentAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-          status: 'sent',
+          status: 'sent' as const,
           retryCount: 0,
         },
       ],
@@ -306,9 +306,9 @@ const AlertsManagement: React.FC = () => {
       id: 'alert-3',
       ruleId: 'rule-3',
       ruleName: 'Pérdida de Datos',
-      type: 'dataLoss',
-      severity: 'high',
-      status: 'resolved',
+      type: 'dataLoss' as const,
+      severity: 'high' as const,
+      status: 'resolved' as const,
       title: 'Pérdida de Comunicación con Medidor',
       message: 'No se han recibido datos del medidor MTR-003 durante 20 minutos',
       triggeredAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
@@ -331,10 +331,10 @@ const AlertsManagement: React.FC = () => {
       notifications: [
         {
           id: 'notif-4',
-          channel: 'email',
+          channel: 'email' as NotificationChannel,
           recipient: 'tecnico@empresa.com',
           sentAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
-          status: 'sent',
+          status: 'sent' as const,
           retryCount: 0,
         },
       ],
@@ -343,9 +343,9 @@ const AlertsManagement: React.FC = () => {
       id: 'alert-4',
       ruleId: 'rule-4',
       ruleName: 'Demanda Alta',
-      type: 'demand',
-      severity: 'medium',
-      status: 'active',
+      type: 'demand' as const,
+      severity: 'critical' as const,
+      status: 'active' as const,
       title: 'Demanda de Energía Alta',
       message: 'Demanda actual: 950 kW (umbral: 900 kW)',
       triggeredAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
@@ -368,10 +368,10 @@ const AlertsManagement: React.FC = () => {
       notifications: [
         {
           id: 'notif-5',
-          channel: 'email',
+          channel: 'email' as NotificationChannel,
           recipient: 'supervisor@empresa.com',
           sentAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-          status: 'sent',
+          status: 'sent' as const,
           retryCount: 0,
         },
       ],
@@ -415,18 +415,18 @@ const AlertsManagement: React.FC = () => {
         },
       ],
       maxAlertsPerHour: 10,
-      digestFrequency: 'daily',
+      digestFrequency: 'daily' as const,
     },
     channelSettings: {
       email: {
         enabled: true,
         address: 'usuario@empresa.com',
-        frequency: 'immediate',
+        frequency: 'immediate' as const,
       },
       sms: {
         enabled: false,
         phoneNumber: '+573001234567',
-        frequency: 'immediate',
+        frequency: 'immediate' as const,
       },
       platform: {
         enabled: true,
@@ -443,7 +443,7 @@ const AlertsManagement: React.FC = () => {
           {
             id: 'test-condition',
             metric: 'testMode',
-            operator: 'eq',
+            operator: 'eq' as const,
             threshold: 1,
             unit: '',
             duration: 0,
@@ -474,22 +474,13 @@ const AlertsManagement: React.FC = () => {
   const [deleteGroup] = useDeleteAlertGroupMutation();
   const [updateSettings] = useUpdateAlertSettingsMutation();
 
-  // Sincronizar datos con el store
+  // Sincronizar datos con el store (solo una vez al montar)
   useEffect(() => {
-    if (rulesData) dispatch(setRules(rulesData));
-  }, [rulesData, dispatch]);
-
-  useEffect(() => {
-    if (instancesData) dispatch(setInstances(instancesData));
-  }, [instancesData, dispatch]);
-
-  useEffect(() => {
-    if (groupsData) dispatch(setGroups(groupsData));
-  }, [groupsData, dispatch]);
-
-  useEffect(() => {
-    if (settingsData) dispatch(setSettings(settingsData));
-  }, [settingsData, dispatch]);
+    dispatch(setRules(rulesData));
+    dispatch(setInstances(instancesData));
+    dispatch(setGroups(groupsData));
+    dispatch(setSettings(settingsData));
+  }, [dispatch]);
 
   const handleCreateRule = async (ruleData: Omit<AlertRule, 'id' | 'createdAt' | 'updatedAt'>) => {
     try {

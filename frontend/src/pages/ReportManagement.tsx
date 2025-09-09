@@ -152,25 +152,14 @@ const ReportManagement: React.FC = () => {
   const [toggleScheduledReport] = useToggleScheduledReportMutation();
 
   // Sincronizar datos con el store
+  // Sincronizar datos con el store (solo una vez al montar)
   useEffect(() => {
     if (templatesData) dispatch(setTemplates(templatesData));
-  }, [templatesData, dispatch]);
-
-  useEffect(() => {
     if (scheduledReportsData) dispatch(setScheduledReports(scheduledReportsData));
-  }, [scheduledReportsData, dispatch]);
-
-  useEffect(() => {
     if (generatedReportsData) dispatch(setGeneratedReports(generatedReportsData));
-  }, [generatedReportsData, dispatch]);
-
-  useEffect(() => {
     if (reportHistoryData) dispatch(setReportHistory(reportHistoryData));
-  }, [reportHistoryData, dispatch]);
-
-  useEffect(() => {
     if (analyticsData) dispatch(setAnalytics(analyticsData));
-  }, [analyticsData, dispatch]);
+  }, [dispatch]);
 
   const handleRefresh = async () => {
     setIsRefreshing(true);

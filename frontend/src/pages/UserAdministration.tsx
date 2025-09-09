@@ -152,25 +152,14 @@ const UserAdministration: React.FC = () => {
   const [deleteRole] = useDeleteRoleMutation();
 
   // Sincronizar datos con el store
+  // Sincronizar datos con el store (solo una vez al montar)
   useEffect(() => {
     if (usersData) dispatch(setUsers(usersData));
-  }, [usersData, dispatch]);
-
-  useEffect(() => {
     if (groupsData) dispatch(setGroups(groupsData));
-  }, [groupsData, dispatch]);
-
-  useEffect(() => {
     if (rolesData) dispatch(setRoles(rolesData));
-  }, [rolesData, dispatch]);
-
-  useEffect(() => {
     if (logsData) dispatch(setAccessLogs(logsData));
-  }, [logsData, dispatch]);
-
-  useEffect(() => {
     if (sessionsData) dispatch(setSessions(sessionsData));
-  }, [sessionsData, dispatch]);
+  }, [dispatch]);
 
   const handleCreateUser = async (userData: Omit<User, 'id' | 'createdAt' | 'updatedAt'>) => {
     try {

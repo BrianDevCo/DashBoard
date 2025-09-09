@@ -149,37 +149,17 @@ const KPIDashboard: React.FC = () => {
   const [exportKPIs] = useExportKPIsMutation();
 
   // Sincronizar datos con el store
+  // Sincronizar datos con el store (solo una vez al montar)
   useEffect(() => {
     if (kpiCardsData) dispatch(setKPICards(kpiCardsData));
-  }, [kpiCardsData, dispatch]);
-
-  useEffect(() => {
     if (kpiSummaryData) dispatch(setKPISummary(kpiSummaryData));
-  }, [kpiSummaryData, dispatch]);
-
-  useEffect(() => {
     if (kpiTrendData) dispatch(setKPITrend(kpiTrendData));
-  }, [kpiTrendData, dispatch]);
-
-  useEffect(() => {
     if (consumptionBySiteData) dispatch(setConsumptionBySite(consumptionBySiteData));
-  }, [consumptionBySiteData, dispatch]);
-
-  useEffect(() => {
     if (consumptionByClientData) dispatch(setConsumptionByClient(consumptionByClientData));
-  }, [consumptionByClientData, dispatch]);
-
-  useEffect(() => {
     if (consumptionByGroupData) dispatch(setConsumptionByGroup(consumptionByGroupData));
-  }, [consumptionByGroupData, dispatch]);
-
-  useEffect(() => {
     if (peakDemandRecordsData) dispatch(setPeakDemandRecords(peakDemandRecordsData));
-  }, [peakDemandRecordsData, dispatch]);
-
-  useEffect(() => {
     if (reactiveEnergyRatiosData) dispatch(setReactiveEnergyRatios(reactiveEnergyRatiosData));
-  }, [reactiveEnergyRatiosData, dispatch]);
+  }, [dispatch]);
 
   // Auto-refresh
   useEffect(() => {
