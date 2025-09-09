@@ -19,7 +19,7 @@ import {
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { es } from 'date-fns/locale';
-import { useGetHistoricalMetricsQuery, useGetChartDataQuery, useGetMetersQuery, useGetBillingComparisonQuery } from '../services/energyApi';
+// import { useGetHistoricalMetricsQuery, useGetChartDataQuery, useGetMetersQuery, useGetBillingComparisonQuery } from '../services/energyApi';
 import EnergyChart, { ChartType } from '../components/EnergyChart';
 import EnergyMatrix from '../components/EnergyMatrix';
 import EnergySummary from '../components/EnergySummary';
@@ -39,56 +39,76 @@ const EnergyMetrics: React.FC = () => {
   const [showComparison, setShowComparison] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<number>(0);
 
-  const { data: meters, isLoading: isLoadingMeters } = useGetMetersQuery();
-  
-  // Convertir TimeInterval a formato de API
-  const getApiInterval = (interval: TimeInterval): 'hourly' | 'daily' | 'monthly' => {
-    switch (interval) {
-      case '15min':
-      case 'hour':
-        return 'hourly';
-      case 'day':
-      case 'week':
-        return 'daily';
-      case 'month':
-      case 'year':
-        return 'monthly';
-      case 'custom':
-        return 'daily';
-      default:
-        return 'daily';
+  // Datos mock para presentación
+  const meters = [
+    { id: '1', name: 'Medidor Principal', location: 'Planta Norte' },
+    { id: '2', name: 'Medidor Secundario', location: 'Oficinas Centrales' },
+    { id: '3', name: 'Medidor Auxiliar', location: 'Centro de Datos' },
+    { id: '4', name: 'Medidor de Respaldo', location: 'Almacén Principal' },
+  ];
+
+  // Generar datos históricos mock
+  const generateMockHistoricalData = () => {
+    const data = [];
+    const now = new Date();
+    for (let i = 0; i < 24; i++) {
+      const date = new Date(now.getTime() - i * 60 * 60 * 1000);
+      data.push({
+        id: i.toString(),
+        timestamp: date.toISOString(),
+        meterId: selectedMeter === 'all' ? '1' : selectedMeter,
+        kWhD: Math.random() * 1000 + 500,
+        kVarhD: Math.random() * 200 + 100,
+        kWhR: Math.random() * 50 + 25,
+        kVarhR: Math.random() * 100 + 50,
+        kVarhPenalized: Math.random() * 50 + 10,
+        powerFactor: 0.85 + Math.random() * 0.15,
+        voltage: 220 + Math.random() * 20,
+        current: 10 + Math.random() * 20,
+        temperature: 20 + Math.random() * 10,
+        humidity: 40 + Math.random() * 30,
+      });
     }
+    return data.reverse();
   };
 
-  const { data: historicalMetrics, isLoading: isLoadingHistorical } = useGetHistoricalMetricsQuery({
-    startDate: startDate?.toISOString() || '',
-    endDate: endDate?.toISOString() || '',
-    meterId: selectedMeter === 'all' ? undefined : selectedMeter,
-    interval: getApiInterval(selectedInterval),
-  });
+  const historicalMetrics = generateMockHistoricalData();
+  const comparisonData = generateMockHistoricalData().map(item => ({
+    ...item,
+    kWhD: item.kWhD * 0.8, // Datos de comparación 20% menores
+    kVarhD: item.kVarhD * 0.9,
+  }));
 
-  const { data: chartData, isLoading: isLoadingChart } = useGetChartDataQuery({
-    metric: selectedMetric,
-    period: getApiInterval(selectedInterval),
-    startDate: startDate?.toISOString() || '',
-    endDate: endDate?.toISOString() || '',
-    meterId: selectedMeter === 'all' ? undefined : selectedMeter,
-  });
+  const chartData = historicalMetrics;
 
-  // Obtener datos de comparación (consumos típicos)
-  const { data: comparisonData } = useGetHistoricalMetricsQuery({
-    startDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-    endDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    meterId: selectedMeter === 'all' ? undefined : selectedMeter,
-    interval: getApiInterval(selectedInterval),
-  });
+  const billingComparison = {
+    billing: {
+      totalCost: 1250000,
+      energyCost: 980000,
+      demandCost: 200000,
+      reactiveCost: 70000,
+      period: 'Último mes'
+    },
+    consumption: {
+      totalKWh: 45000,
+      peakDemand: 1200,
+      averageDemand: 600,
+      powerFactor: 0.92
+    },
+    variance: {
+      costVariance: 5.2,
+      consumptionVariance: -2.1,
+      efficiencyVariance: 8.5
+    },
+    costPerKWh: 27.8
+  };
 
-  // Obtener datos de facturación vs consumos
-  const { data: billingComparison, isLoading: isLoadingBilling } = useGetBillingComparisonQuery({
-    startDate: startDate?.toISOString() || '',
-    endDate: endDate?.toISOString() || '',
-    meterId: selectedMeter === 'all' ? undefined : selectedMeter,
-  });
+  const isLoadingMeters = false;
+  const isLoadingHistorical = false;
+  const isLoadingChart = false;
+  const isLoadingBilling = false;
+  
+  // Los datos mock ya están definidos arriba
 
   const handleSearch = () => {
     // Los datos se actualizan automáticamente con RTK Query
@@ -105,6 +125,9 @@ const EnergyMetrics: React.FC = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={es}>
       <Box>
+        <Alert severity="success" sx={{ mb: 2 }}>
+          ✅ Métricas Energéticas funcionando correctamente con datos simulados
+        </Alert>
         <Typography variant="h4" gutterBottom>
           Visualización del Consumo de Energía
         </Typography>
@@ -234,7 +257,7 @@ const EnergyMetrics: React.FC = () => {
                     <Box display="flex" justifyContent="center" p={4}>
                       <CircularProgress />
                     </Box>
-                  ) : historicalMetrics && historicalMetrics.length > 0 ? (
+                  ) : (
                     <EnergyChart
                       data={historicalMetrics}
                       chartType={chartType}
@@ -243,10 +266,6 @@ const EnergyMetrics: React.FC = () => {
                       showComparison={showComparison}
                       comparisonData={comparisonData || []}
                     />
-                  ) : (
-                    <Alert severity="info">
-                      Selecciona un rango de fechas y métrica para visualizar los datos
-                    </Alert>
                   )}
                 </CardContent>
               </Card>
@@ -271,7 +290,7 @@ const EnergyMetrics: React.FC = () => {
               <Box display="flex" justifyContent="center" p={4}>
                 <CircularProgress />
               </Box>
-            ) : billingComparison ? (
+            ) : (
               <BillingComparison
                 billingData={billingComparison.billing}
                 consumptionData={billingComparison.consumption}
@@ -279,10 +298,6 @@ const EnergyMetrics: React.FC = () => {
                 costPerKWh={billingComparison.costPerKWh}
                 period={selectedInterval}
               />
-            ) : (
-              <Alert severity="info">
-                No hay datos de facturación disponibles para el período seleccionado
-              </Alert>
             )}
           </Box>
         )}
@@ -299,12 +314,8 @@ const EnergyMetrics: React.FC = () => {
                     <Box display="flex" justifyContent="center" p={4}>
                       <CircularProgress />
                     </Box>
-                  ) : historicalMetrics && historicalMetrics.length > 0 ? (
-                    <MetricsTable data={historicalMetrics} />
                   ) : (
-                    <Alert severity="info">
-                      No se encontraron datos para el período seleccionado
-                    </Alert>
+                    <MetricsTable data={historicalMetrics} />
                   )}
                 </CardContent>
               </Card>
