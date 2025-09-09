@@ -50,7 +50,11 @@ const Dashboard: React.FC = () => {
   const alerts = mockData.alerts;
 
   return (
-    <Box>
+    <Box sx={{ 
+      height: '100%', 
+      overflow: 'auto',
+      pb: 3 // Padding bottom para asegurar que el último contenido sea visible
+    }}>
       <Typography variant="h4" gutterBottom>
         Dashboard Energético
       </Typography>

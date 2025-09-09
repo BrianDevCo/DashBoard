@@ -79,7 +79,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ 
+      display: 'flex', 
+      minHeight: '100vh',
+      maxHeight: '100vh', // Altura máxima para evitar scroll en el body
+      overflow: 'hidden' // Evitar scroll en el contenedor principal
+    }}>
       {/* AppBar */}
       <AppBar
         position="fixed"
@@ -194,8 +199,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           p: { xs: 1, sm: 2, md: 3 },
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           mt: { xs: 7, sm: 8, md: 10 }, // Responsive margin-top
-          minHeight: '100vh',
-          overflow: 'auto',
+          minHeight: 'calc(100vh - 64px)', // Altura completa menos el header
+          maxHeight: 'calc(100vh - 64px)', // Altura máxima
+          overflowY: 'auto', // Scroll vertical
+          overflowX: 'hidden', // Sin scroll horizontal
+          position: 'relative',
         }}
       >
         {children}
