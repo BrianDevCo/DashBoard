@@ -683,20 +683,20 @@ const ExecutiveDashboard: React.FC = () => {
       </Grid>
 
       {/* Alertas destacadas */}
-      {showAlerts && alertsData.length > 0 && (
-        <Card sx={{ mb: { xs: 2, sm: 3 } }}>
-          <CardHeader
-            title="Alertas Destacadas"
-            titleTypographyProps={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
-            action={
-              <IconButton 
-                onClick={() => dispatch(setShowAlerts(!showAlerts))}
-                size="small"
-              >
-                {showAlerts ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            }
-          />
+      <Card sx={{ mb: { xs: 2, sm: 3 } }}>
+        <CardHeader
+          title="Alertas Destacadas"
+          titleTypographyProps={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
+          action={
+            <IconButton 
+              onClick={() => dispatch(setShowAlerts(!showAlerts))}
+              size="small"
+            >
+              {showAlerts ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          }
+        />
+        {showAlerts && alertsData.length > 0 && (
           <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
             <Grid container spacing={{ xs: 1, sm: 2 }}>
               {alertsData.slice(0, 6).map((alert) => (
@@ -744,24 +744,24 @@ const ExecutiveDashboard: React.FC = () => {
               ))}
             </Grid>
           </CardContent>
-        </Card>
-      )}
+        )}
+      </Card>
 
       {/* Insights destacados */}
-      {showInsights && insightsData.length > 0 && (
-        <Card sx={{ mb: { xs: 2, sm: 3 } }}>
-          <CardHeader
-            title="Insights y Recomendaciones"
-            titleTypographyProps={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
-            action={
-              <IconButton 
-                onClick={() => dispatch(setShowInsights(!showInsights))}
-                size="small"
-              >
-                {showInsights ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            }
-          />
+      <Card sx={{ mb: { xs: 2, sm: 3 } }}>
+        <CardHeader
+          title="Insights y Recomendaciones"
+          titleTypographyProps={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
+          action={
+            <IconButton 
+              onClick={() => dispatch(setShowInsights(!showInsights))}
+              size="small"
+            >
+              {showInsights ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          }
+        />
+        {showInsights && insightsData.length > 0 && (
           <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
             <Grid container spacing={{ xs: 1, sm: 2 }}>
               {insightsData.slice(0, 6).map((insight) => (
@@ -823,24 +823,24 @@ const ExecutiveDashboard: React.FC = () => {
               ))}
             </Grid>
           </CardContent>
-        </Card>
-      )}
+        )}
+      </Card>
 
       {/* Tendencias principales */}
-      {showTrends && trendsData.length > 0 && (
-        <Card sx={{ mb: { xs: 2, sm: 3 } }}>
-          <CardHeader
-            title="Tendencias Principales"
-            titleTypographyProps={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
-            action={
-              <IconButton 
-                onClick={() => dispatch(setShowTrends(!showTrends))}
-                size="small"
-              >
-                {showTrends ? <VisibilityOff /> : <Visibility />}
-              </IconButton>
-            }
-          />
+      <Card sx={{ mb: { xs: 2, sm: 3 } }}>
+        <CardHeader
+          title="Tendencias Principales"
+          titleTypographyProps={{ fontSize: { xs: '1rem', sm: '1.25rem' } }}
+          action={
+            <IconButton 
+              onClick={() => dispatch(setShowTrends(!showTrends))}
+              size="small"
+            >
+              {showTrends ? <VisibilityOff /> : <Visibility />}
+            </IconButton>
+          }
+        />
+        {showTrends && trendsData.length > 0 && (
           <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
             <Grid container spacing={{ xs: 2, sm: 3 }}>
               {trendsData.slice(0, 4).map((trend) => (
@@ -891,8 +891,8 @@ const ExecutiveDashboard: React.FC = () => {
               ))}
             </Grid>
           </CardContent>
-        </Card>
-      )}
+        )}
+      </Card>
 
       {/* Resumen ejecutivo */}
       {summary && (

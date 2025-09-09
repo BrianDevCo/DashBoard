@@ -330,6 +330,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           overflowY: 'auto', // Scroll vertical
           overflowX: 'hidden', // Sin scroll horizontal
           position: 'relative',
+          // Asegurar que el scroll llegue hasta la derecha
+          '&::-webkit-scrollbar': {
+            width: '8px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: 'rgba(0,0,0,0.1)',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: 'rgba(0,0,0,0.3)',
+            borderRadius: '4px',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            background: 'rgba(0,0,0,0.5)',
+          },
         }}
       >
         {children}
