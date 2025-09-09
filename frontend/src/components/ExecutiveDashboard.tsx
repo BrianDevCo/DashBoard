@@ -704,7 +704,7 @@ const ExecutiveDashboard: React.FC = () => {
                     <Chip
                       label={EXECUTIVE_UTILS.getChangeIcon(kpi.changeType)}
                       size="small"
-                      color={EXECUTIVE_UTILS.getChangeColor(kpi.change, kpi.changeType) as any}
+                      color={EXECUTIVE_UTILS.getChangeColor(kpi.change, kpi.changeType as 'stable' | 'increase' | 'decrease') as any}
                       sx={{ fontSize: viewMode === 'list' ? '0.75rem' : { xs: '0.7rem', sm: '0.75rem' } }}
                     />
                   </Box>
