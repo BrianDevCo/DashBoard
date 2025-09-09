@@ -93,19 +93,20 @@ const EnergyMetrics: React.FC = () => {
     for (let i = 0; i < 12; i++) {
       const date = new Date();
       date.setMonth(date.getMonth() - i);
+      const startDate = new Date(date.getFullYear(), date.getMonth(), 1);
+      const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+      
       data.push({
         id: i.toString(),
         period: date.toISOString().substring(0, 7), // YYYY-MM
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+        totalKWh: Math.random() * 10000 + 40000,
+        totalKVarh: Math.random() * 2000 + 8000,
         totalCost: Math.random() * 500000 + 1000000,
         energyCost: Math.random() * 400000 + 800000,
-        demandCost: Math.random() * 100000 + 150000,
         reactiveCost: Math.random() * 50000 + 50000,
-        totalKWh: Math.random() * 10000 + 40000,
-        peakDemand: Math.random() * 200 + 1000,
-        averageDemand: Math.random() * 100 + 500,
-        powerFactor: 0.85 + Math.random() * 0.15,
-        costPerKWh: 20 + Math.random() * 15,
-        variance: Math.random() * 20 - 10, // -10% a +10%
+        taxes: Math.random() * 100000 + 200000,
       });
     }
     return data;
