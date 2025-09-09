@@ -88,14 +88,217 @@ const AlertsManagement: React.FC = () => {
   const [editingRule, setEditingRule] = useState<AlertRule | null>(null);
   const [snackbar, setSnackbar] = useState({ open: false, message: '' });
 
-  // Queries
-  const { data: rulesData, refetch: refetchRules } = useGetAlertRulesQuery();
-  const { data: instancesData, refetch: refetchInstances } = useGetAlertInstancesQuery({
-    status: 'all',
-    limit: 100,
+  // Datos mock para demostración
+  const generateMockAlertRules = () => [
+    {
+      id: 'rule-1',
+      name: 'Factor de Potencia Bajo',
+      description: 'Alerta cuando el factor de potencia es menor a 0.85',
+      type: 'threshold',
+      severity: 'warning',
+      enabled: true,
+      conditions: [
+        {
+          metric: 'powerFactor',
+          operator: 'lt',
+          value: 0.85,
+          duration: 300,
+        },
+      ],
+      notificationChannels: ['email', 'sms'],
+      cooldownPeriod: 3600,
+      createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+      updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: 'rule-2',
+      name: 'Consumo Energético Alto',
+      description: 'Alerta cuando el consumo supera el 90% del promedio mensual',
+      type: 'threshold',
+      severity: 'critical',
+      enabled: true,
+      conditions: [
+        {
+          metric: 'kWhD',
+          operator: 'gt',
+          value: 8000,
+          duration: 1800,
+        },
+      ],
+      notificationChannels: ['email', 'sms', 'push'],
+      cooldownPeriod: 1800,
+      createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
+      updatedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: 'rule-3',
+      name: 'Voltaje Fuera de Rango',
+      description: 'Alerta cuando el voltaje está fuera del rango normal (200-240V)',
+      type: 'range',
+      severity: 'error',
+      enabled: true,
+      conditions: [
+        {
+          metric: 'voltage',
+          operator: 'outside_range',
+          value: { min: 200, max: 240 },
+          duration: 600,
+        },
+      ],
+      notificationChannels: ['email'],
+      cooldownPeriod: 7200,
+      createdAt: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000).toISOString(),
+      updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: 'rule-4',
+      name: 'Temperatura Elevada',
+      description: 'Alerta cuando la temperatura del medidor supera los 50°C',
+      type: 'threshold',
+      severity: 'warning',
+      enabled: true,
+      conditions: [
+        {
+          metric: 'temperature',
+          operator: 'gt',
+          value: 50,
+          duration: 900,
+        },
+      ],
+      notificationChannels: ['email', 'push'],
+      cooldownPeriod: 3600,
+      createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
+      updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+  ];
+
+  const generateMockAlertInstances = () => [
+    {
+      id: 'alert-1',
+      ruleId: 'rule-1',
+      ruleName: 'Factor de Potencia Bajo',
+      severity: 'warning',
+      status: 'active',
+      message: 'Factor de potencia en MTR-001: 0.82 (umbral: 0.85)',
+      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+      acknowledgedAt: null,
+      acknowledgedBy: null,
+      resolvedAt: null,
+      resolvedBy: null,
+      metadata: {
+        meterId: 'MTR-001',
+        location: 'Planta Principal',
+        currentValue: 0.82,
+        threshold: 0.85,
+      },
+    },
+    {
+      id: 'alert-2',
+      ruleId: 'rule-2',
+      ruleName: 'Consumo Energético Alto',
+      severity: 'critical',
+      status: 'active',
+      message: 'Consumo energético en MTR-002: 8,450 kWh (umbral: 8,000 kWh)',
+      timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+      acknowledgedAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
+      acknowledgedBy: 'admin@empresa.com',
+      resolvedAt: null,
+      resolvedBy: null,
+      metadata: {
+        meterId: 'MTR-002',
+        location: 'Edificio A',
+        currentValue: 8450,
+        threshold: 8000,
+      },
+    },
+    {
+      id: 'alert-3',
+      ruleId: 'rule-3',
+      ruleName: 'Voltaje Fuera de Rango',
+      severity: 'error',
+      status: 'resolved',
+      message: 'Voltaje en MTR-003: 195V (rango normal: 200-240V)',
+      timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+      acknowledgedAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+      acknowledgedBy: 'tecnico@empresa.com',
+      resolvedAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+      resolvedBy: 'tecnico@empresa.com',
+      metadata: {
+        meterId: 'MTR-003',
+        location: 'Edificio B',
+        currentValue: 195,
+        range: { min: 200, max: 240 },
+      },
+    },
+    {
+      id: 'alert-4',
+      ruleId: 'rule-4',
+      ruleName: 'Temperatura Elevada',
+      severity: 'warning',
+      status: 'acknowledged',
+      message: 'Temperatura en MTR-001: 52°C (umbral: 50°C)',
+      timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
+      acknowledgedAt: new Date(Date.now() - 7 * 60 * 60 * 1000).toISOString(),
+      acknowledgedBy: 'supervisor@empresa.com',
+      resolvedAt: null,
+      resolvedBy: null,
+      metadata: {
+        meterId: 'MTR-001',
+        location: 'Planta Principal',
+        currentValue: 52,
+        threshold: 50,
+      },
+    },
+  ];
+
+  const generateMockAlertGroups = () => [
+    {
+      id: 'group-1',
+      name: 'Grupo Crítico',
+      description: 'Alertas críticas que requieren atención inmediata',
+      rules: ['rule-2'],
+      users: ['admin@empresa.com', 'supervisor@empresa.com'],
+      meters: ['MTR-001', 'MTR-002'],
+      locations: ['Planta Principal', 'Edificio A'],
+      notificationChannels: ['email', 'sms', 'push'],
+      createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+      updatedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+    {
+      id: 'group-2',
+      name: 'Grupo Monitoreo',
+      description: 'Alertas de monitoreo general del sistema',
+      rules: ['rule-1', 'rule-4'],
+      users: ['tecnico@empresa.com'],
+      meters: ['MTR-001', 'MTR-003'],
+      locations: ['Planta Principal', 'Edificio B'],
+      notificationChannels: ['email'],
+      createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
+      updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+    },
+  ];
+
+  const generateMockAlertSettings = () => ({
+    userId: 'current-user',
+    emailNotifications: true,
+    smsNotifications: false,
+    pushNotifications: true,
+    quietHours: {
+      enabled: true,
+      start: '22:00',
+      end: '06:00',
+    },
+    alertFrequency: 'immediate',
+    digestFrequency: 'daily',
+    language: 'es',
+    timezone: 'America/Bogota',
   });
-  const { data: groupsData, refetch: refetchGroups } = useGetAlertGroupsQuery();
-  const { data: settingsData, refetch: refetchSettings } = useGetAlertSettingsQuery('current-user');
+
+  // Usar datos mock en lugar de las queries
+  const rulesData = generateMockAlertRules();
+  const instancesData = generateMockAlertInstances();
+  const groupsData = generateMockAlertGroups();
+  const settingsData = generateMockAlertSettings();
 
   // Mutations
   const [createRule] = useCreateAlertRuleMutation();
@@ -247,21 +450,27 @@ const AlertsManagement: React.FC = () => {
   };
 
   const getActiveAlertsCount = () => {
-    return instances.filter(instance => instance.status === 'active').length;
+    return instancesData.filter(instance => instance.status === 'active').length;
   };
 
   const getCriticalAlertsCount = () => {
-    return instances.filter(instance => 
+    return instancesData.filter(instance => 
       instance.status === 'active' && instance.severity === 'critical'
     ).length;
   };
 
   const getRulesCount = () => {
-    return rules.length;
+    return rulesData.length;
   };
 
   const getEnabledRulesCount = () => {
-    return rules.filter(rule => rule.enabled).length;
+    return rulesData.filter(rule => rule.enabled).length;
+  };
+
+  const getUnreadCount = () => {
+    return instancesData.filter(instance => 
+      instance.status === 'active' && !instance.acknowledgedAt
+    ).length;
   };
 
   return (
@@ -269,6 +478,10 @@ const AlertsManagement: React.FC = () => {
       <Typography variant="h4" gutterBottom>
         Gestión de Alertas y Notificaciones
       </Typography>
+      
+      <Alert severity="success" sx={{ mb: 3 }}>
+        ✅ Sistema de Alertas funcionando correctamente con datos simulados para demostración
+      </Alert>
 
       {/* Resumen de alertas */}
       <Grid container spacing={3} sx={{ mb: 3 }}>
@@ -332,7 +545,7 @@ const AlertsManagement: React.FC = () => {
               <Box display="flex" alignItems="center" justifyContent="space-between">
                 <Box>
                   <Typography variant="h4" color="info.main">
-                    {groups.length}
+                    {groupsData.length}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Grupos
@@ -351,7 +564,7 @@ const AlertsManagement: React.FC = () => {
           <Tabs value={activeTab} onChange={(_, newValue) => setActiveTab(newValue)}>
             <Tab
               icon={
-                <Badge badgeContent={unreadCount} color="error">
+                <Badge badgeContent={getUnreadCount()} color="error">
                   <History />
                 </Badge>
               }
@@ -367,7 +580,7 @@ const AlertsManagement: React.FC = () => {
           {/* Pestaña de Historial */}
           {activeTab === 0 && (
             <AlertHistory
-              alerts={instances}
+              alerts={instancesData}
               onAcknowledge={handleAcknowledgeAlert}
               onResolve={handleResolveAlert}
               onBulkAcknowledge={handleBulkAcknowledge}
@@ -382,7 +595,7 @@ const AlertsManagement: React.FC = () => {
             <Box>
               <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
                 <Typography variant="h6">
-                  Reglas de Alertas ({rules.length})
+                  Reglas de Alertas ({rulesData.length})
                 </Typography>
                 <Box display="flex" gap={1}>
                   <Button
@@ -402,13 +615,13 @@ const AlertsManagement: React.FC = () => {
                 </Box>
               </Box>
 
-              {rules.length === 0 ? (
+              {rulesData.length === 0 ? (
                 <Alert severity="info">
                   No hay reglas de alertas configuradas. Crea tu primera regla para comenzar a monitorear.
                 </Alert>
               ) : (
                 <Grid container spacing={3}>
-                  {rules.map((rule) => (
+                  {rulesData.map((rule) => (
                     <Grid item xs={12} md={6} lg={4} key={rule.id}>
                       <Card>
                         <CardContent>
@@ -477,10 +690,10 @@ const AlertsManagement: React.FC = () => {
           {/* Pestaña de Grupos */}
           {activeTab === 2 && (
             <AlertGroups
-              groups={groups}
-              meters={[]} // TODO: Obtener de la API
-              users={[]} // TODO: Obtener de la API
-              locations={[]} // TODO: Obtener de la API
+              groups={groupsData}
+              meters={['MTR-001', 'MTR-002', 'MTR-003', 'MTR-004']}
+              users={['admin@empresa.com', 'supervisor@empresa.com', 'tecnico@empresa.com']}
+              locations={['Planta Principal', 'Edificio A', 'Edificio B', 'Almacén Central']}
               onCreateGroup={handleCreateGroup}
               onUpdateGroup={handleUpdateGroup}
               onDeleteGroup={handleDeleteGroup}

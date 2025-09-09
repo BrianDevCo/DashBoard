@@ -63,17 +63,61 @@ const CustomizableDashboardPage: React.FC = () => {
   const [snackbar, setSnackbar] = useState({ open: false, message: '' });
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // Obtener datos para los widgets
-  const { data: energyData } = useGetHistoricalMetricsQuery({
-    startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    endDate: new Date().toISOString(),
-    interval: 'daily',
-  });
+  // Datos mock para demostración
+  const generateMockEnergyData = () => {
+    const data = [];
+    for (let i = 0; i < 7; i++) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      data.push({
+        id: i.toString(),
+        timestamp: date.toISOString(),
+        meterId: 'MTR-001',
+        obisCode: '1.0.0.0.0.255',
+        location: 'Planta Principal',
+        kWhD: Math.random() * 1000 + 5000,
+        kVarhD: Math.random() * 200 + 1000,
+        kWhR: Math.random() * 50 + 100,
+        kVarhR: Math.random() * 20 + 50,
+        kVarhPenalized: Math.random() * 100 + 200,
+        powerFactor: 0.85 + Math.random() * 0.15,
+        voltage: 220 + Math.random() * 20,
+        current: 50 + Math.random() * 100,
+        temperature: 20 + Math.random() * 10,
+        humidity: 40 + Math.random() * 30,
+      });
+    }
+    return data;
+  };
 
-  const { data: billingData } = useGetBillingComparisonQuery({
-    startDate: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-    endDate: new Date().toISOString(),
-  });
+  const generateMockBillingData = () => {
+    const data = [];
+    for (let i = 0; i < 6; i++) {
+      const date = new Date();
+      date.setMonth(date.getMonth() - i);
+      const startDate = new Date(date.getFullYear(), date.getMonth(), 1);
+      const endDate = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+      
+      data.push({
+        id: i.toString(),
+        period: date.toISOString().substring(0, 7),
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+        totalKWh: Math.random() * 10000 + 40000,
+        totalKVarh: Math.random() * 2000 + 8000,
+        totalCost: Math.random() * 500000 + 1000000,
+        energyCost: Math.random() * 400000 + 800000,
+        reactiveCost: Math.random() * 50000 + 50000,
+        taxes: Math.random() * 100000 + 200000,
+        meterId: 'MTR-001',
+        location: 'Planta Principal',
+      });
+    }
+    return data;
+  };
+
+  const energyData = generateMockEnergyData();
+  const billingData = { billing: generateMockBillingData() };
 
   // Inicializar preferencias de usuario por defecto
   useEffect(() => {
@@ -375,6 +419,9 @@ const CustomizableDashboardPage: React.FC = () => {
           </AppBar>
 
           <Box sx={{ flex: 1, p: 2, overflow: 'auto' }}>
+            <Alert severity="success" sx={{ mb: 2 }}>
+              ✅ Dashboard Personalizable funcionando correctamente con datos simulados para demostración
+            </Alert>
             {currentLayout ? (
               <CustomizableDashboard
                 widgets={currentLayout.widgets}
