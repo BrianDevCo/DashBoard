@@ -18,13 +18,24 @@ import {
 import { useGetRealTimeMetricsQuery, useGetEnergySummaryQuery, useGetAlertsQuery } from '../services/energyApi';
 import EnergyChart from '../components/EnergyChart';
 import MetricCard from '../components/MetricCard';
+import { mockEnergyData } from '../data/mockData';
 
 const Dashboard: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState<'day' | 'week' | 'month'>('day');
   
-  const { data: realTimeMetrics, isLoading: isLoadingMetrics, error: metricsError } = useGetRealTimeMetricsQuery();
-  const { data: energySummary, isLoading: isLoadingSummary } = useGetEnergySummaryQuery({ period: selectedPeriod });
-  const { data: alerts, isLoading: isLoadingAlerts } = useGetAlertsQuery();
+  // Usar datos simulados en lugar de la API
+  const realTimeMetrics = mockEnergyData.realTimeMetrics;
+  const energySummary = mockEnergyData.energySummary;
+  const alerts = mockEnergyData.alerts;
+  const isLoadingMetrics = false;
+  const isLoadingSummary = false;
+  const isLoadingAlerts = false;
+  const metricsError = null;
+
+  // Comentamos las consultas a la API para evitar errores
+  // const { data: realTimeMetrics, isLoading: isLoadingMetrics, error: metricsError } = useGetRealTimeMetricsQuery();
+  // const { data: energySummary, isLoading: isLoadingSummary } = useGetEnergySummaryQuery({ period: selectedPeriod });
+  // const { data: alerts, isLoading: isLoadingAlerts } = useGetAlertsQuery();
 
   if (isLoadingMetrics || isLoadingSummary) {
     return (

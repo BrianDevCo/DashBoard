@@ -34,10 +34,29 @@ export const mockEnergyData = {
     peakHour: 19,
     efficiency: 85.2
   },
+  realTimeMetrics: [
+    { id: '1', timestamp: '2024-01-15T10:30:00Z', kWhD: 1250, kVarhD: 320, kWhR: 50, kVarhR: 15, kVarhPenalized: 25, obisCode: '1.8.0', meterId: 'M001', location: 'Planta Norte' },
+    { id: '2', timestamp: '2024-01-15T10:30:00Z', kWhD: 980, kVarhD: 280, kWhR: 30, kVarhR: 10, kVarhPenalized: 20, obisCode: '1.8.0', meterId: 'M002', location: 'Oficinas Centrales' },
+    { id: '3', timestamp: '2024-01-15T10:30:00Z', kWhD: 2100, kVarhD: 450, kWhR: 80, kVarhR: 25, kVarhPenalized: 35, obisCode: '1.8.0', meterId: 'M003', location: 'Centro de Datos' }
+  ],
+  energySummary: {
+    totalImported: 1250000,
+    totalExported: 45000,
+    totalReactive: 320000,
+    totalPenalized: 25000,
+    efficiency: 87.5,
+    cost: 75000000,
+    savings: 1250000,
+    powerFactor: 0.92,
+    reactivePercentage: 25.6,
+    maxDemand: 4800,
+    avgDemand: 2600,
+    minDemand: 1200
+  },
   alerts: [
-    { id: 1, type: 'warning', message: 'Consumo alto en hora pico', timestamp: '2024-01-01T19:00:00Z' },
-    { id: 2, type: 'info', message: 'Factor de potencia optimizado', timestamp: '2024-01-01T15:30:00Z' },
-    { id: 3, type: 'success', message: 'Meta de eficiencia alcanzada', timestamp: '2024-01-01T12:00:00Z' }
+    { id: 1, type: 'warning', message: 'Consumo alto en hora pico', timestamp: '2024-01-01T19:00:00Z', severity: 'medium', resolved: false },
+    { id: 2, type: 'info', message: 'Factor de potencia optimizado', timestamp: '2024-01-01T15:30:00Z', severity: 'low', resolved: true },
+    { id: 3, type: 'success', message: 'Meta de eficiencia alcanzada', timestamp: '2024-01-01T12:00:00Z', severity: 'low', resolved: true }
   ],
   clients: [
     { id: 1, name: 'Cliente A', consumption: 25000, efficiency: 88.5 },
