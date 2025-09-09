@@ -94,81 +94,129 @@ const AlertsManagement: React.FC = () => {
       id: 'rule-1',
       name: 'Factor de Potencia Bajo',
       description: 'Alerta cuando el factor de potencia es menor a 0.85',
-      type: 'threshold',
-      severity: 'warning',
+      type: 'powerFactor' as const,
+      severity: 'medium' as const,
       enabled: true,
       conditions: [
         {
+          id: 'pf-condition-1',
           metric: 'powerFactor',
-          operator: 'lt',
-          value: 0.85,
+          operator: 'lt' as const,
+          threshold: 0.85,
+          unit: '',
           duration: 300,
         },
       ],
-      notificationChannels: ['email', 'sms'],
-      cooldownPeriod: 3600,
+      notificationChannels: ['email', 'platform'] as const,
+      recipients: [
+        {
+          id: 'recipient-1',
+          type: 'email' as const,
+          value: 'admin@empresa.com',
+          name: 'Administrador',
+          channels: ['email'] as const,
+        },
+      ],
+      cooldownPeriod: 60,
       createdAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
       updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+      createdBy: 'admin@empresa.com',
     },
     {
       id: 'rule-2',
       name: 'Consumo Energético Alto',
       description: 'Alerta cuando el consumo supera el 90% del promedio mensual',
-      type: 'threshold',
-      severity: 'critical',
+      type: 'consumption' as const,
+      severity: 'critical' as const,
       enabled: true,
       conditions: [
         {
+          id: 'consumption-condition-1',
           metric: 'kWhD',
-          operator: 'gt',
-          value: 8000,
-          duration: 1800,
+          operator: 'gt' as const,
+          threshold: 8000,
+          unit: 'kWh',
+          duration: 30,
         },
       ],
-      notificationChannels: ['email', 'sms', 'push'],
-      cooldownPeriod: 1800,
+      notificationChannels: ['email', 'platform', 'sms'] as const,
+      recipients: [
+        {
+          id: 'recipient-2',
+          type: 'email' as const,
+          value: 'supervisor@empresa.com',
+          name: 'Supervisor',
+          channels: ['email', 'sms'] as const,
+        },
+      ],
+      cooldownPeriod: 30,
       createdAt: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
       updatedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+      createdBy: 'admin@empresa.com',
     },
     {
       id: 'rule-3',
-      name: 'Voltaje Fuera de Rango',
-      description: 'Alerta cuando el voltaje está fuera del rango normal (200-240V)',
-      type: 'range',
-      severity: 'error',
+      name: 'Pérdida de Datos',
+      description: 'Alerta cuando no hay datos del medidor por más de 15 minutos',
+      type: 'dataLoss' as const,
+      severity: 'high' as const,
       enabled: true,
       conditions: [
         {
-          metric: 'voltage',
-          operator: 'outside_range',
-          value: { min: 200, max: 240 },
-          duration: 600,
+          id: 'data-condition-1',
+          metric: 'dataAvailability',
+          operator: 'eq' as const,
+          threshold: 0,
+          unit: '',
+          duration: 15,
         },
       ],
-      notificationChannels: ['email'],
-      cooldownPeriod: 7200,
+      notificationChannels: ['email', 'platform'] as const,
+      recipients: [
+        {
+          id: 'recipient-3',
+          type: 'email' as const,
+          value: 'tecnico@empresa.com',
+          name: 'Técnico',
+          channels: ['email'] as const,
+        },
+      ],
+      cooldownPeriod: 15,
       createdAt: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000).toISOString(),
       updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+      createdBy: 'admin@empresa.com',
     },
     {
       id: 'rule-4',
-      name: 'Temperatura Elevada',
-      description: 'Alerta cuando la temperatura del medidor supera los 50°C',
-      type: 'threshold',
-      severity: 'warning',
+      name: 'Demanda Alta',
+      description: 'Alerta cuando la demanda supera el 90% de la capacidad',
+      type: 'demand' as const,
+      severity: 'medium' as const,
       enabled: true,
       conditions: [
         {
-          metric: 'temperature',
-          operator: 'gt',
-          value: 50,
-          duration: 900,
+          id: 'demand-condition-1',
+          metric: 'demand',
+          operator: 'gt' as const,
+          threshold: 900,
+          unit: 'kW',
+          duration: 60,
         },
       ],
-      notificationChannels: ['email', 'push'],
-      cooldownPeriod: 3600,
+      notificationChannels: ['email', 'platform'] as const,
+      recipients: [
+        {
+          id: 'recipient-4',
+          type: 'email' as const,
+          value: 'supervisor@empresa.com',
+          name: 'Supervisor',
+          channels: ['email'] as const,
+        },
+      ],
+      cooldownPeriod: 60,
       createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
       updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
+      createdBy: 'admin@empresa.com',
     },
   ];
 
@@ -177,77 +225,156 @@ const AlertsManagement: React.FC = () => {
       id: 'alert-1',
       ruleId: 'rule-1',
       ruleName: 'Factor de Potencia Bajo',
-      severity: 'warning',
-      status: 'active',
+      type: 'powerFactor' as const,
+      severity: 'medium' as const,
+      status: 'active' as const,
+      title: 'Factor de Potencia Bajo Detectado',
       message: 'Factor de potencia en MTR-001: 0.82 (umbral: 0.85)',
-      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+      triggeredAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
       acknowledgedAt: null,
       acknowledgedBy: null,
       resolvedAt: null,
       resolvedBy: null,
-      metadata: {
+      data: {
         meterId: 'MTR-001',
         location: 'Planta Principal',
         currentValue: 0.82,
         threshold: 0.85,
+        unit: '',
+        additionalData: {
+          powerFactor: 0.82,
+          recommendedAction: 'Instalar bancos de capacitores',
+        },
       },
+      notifications: [
+        {
+          id: 'notif-1',
+          channel: 'email' as const,
+          recipient: 'admin@empresa.com',
+          sentAt: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+          status: 'sent' as const,
+          retryCount: 0,
+        },
+      ],
     },
     {
       id: 'alert-2',
       ruleId: 'rule-2',
       ruleName: 'Consumo Energético Alto',
-      severity: 'critical',
-      status: 'active',
+      type: 'consumption' as const,
+      severity: 'critical' as const,
+      status: 'acknowledged' as const,
+      title: 'Consumo Energético Crítico',
       message: 'Consumo energético en MTR-002: 8,450 kWh (umbral: 8,000 kWh)',
-      timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+      triggeredAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
       acknowledgedAt: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
       acknowledgedBy: 'admin@empresa.com',
       resolvedAt: null,
       resolvedBy: null,
-      metadata: {
+      data: {
         meterId: 'MTR-002',
         location: 'Edificio A',
         currentValue: 8450,
         threshold: 8000,
+        unit: 'kWh',
+        additionalData: {
+          dailyConsumption: 8450,
+          monthlyAverage: 7500,
+          percentageIncrease: 12.7,
+        },
       },
+      notifications: [
+        {
+          id: 'notif-2',
+          channel: 'email' as const,
+          recipient: 'supervisor@empresa.com',
+          sentAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+          status: 'sent' as const,
+          retryCount: 0,
+        },
+        {
+          id: 'notif-3',
+          channel: 'sms' as const,
+          recipient: '+573001234567',
+          sentAt: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
+          status: 'sent' as const,
+          retryCount: 0,
+        },
+      ],
     },
     {
       id: 'alert-3',
       ruleId: 'rule-3',
-      ruleName: 'Voltaje Fuera de Rango',
-      severity: 'error',
-      status: 'resolved',
-      message: 'Voltaje en MTR-003: 195V (rango normal: 200-240V)',
-      timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+      ruleName: 'Pérdida de Datos',
+      type: 'dataLoss' as const,
+      severity: 'high' as const,
+      status: 'resolved' as const,
+      title: 'Pérdida de Comunicación con Medidor',
+      message: 'No se han recibido datos del medidor MTR-003 durante 20 minutos',
+      triggeredAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
       acknowledgedAt: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
       acknowledgedBy: 'tecnico@empresa.com',
       resolvedAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
       resolvedBy: 'tecnico@empresa.com',
-      metadata: {
+      data: {
         meterId: 'MTR-003',
         location: 'Edificio B',
-        currentValue: 195,
-        range: { min: 200, max: 240 },
+        currentValue: 0,
+        threshold: 0,
+        unit: 'minutos',
+        additionalData: {
+          lastReading: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+          durationWithoutData: 20,
+          communicationStatus: 'lost',
+        },
       },
+      notifications: [
+        {
+          id: 'notif-4',
+          channel: 'email' as const,
+          recipient: 'tecnico@empresa.com',
+          sentAt: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
+          status: 'sent' as const,
+          retryCount: 0,
+        },
+      ],
     },
     {
       id: 'alert-4',
       ruleId: 'rule-4',
-      ruleName: 'Temperatura Elevada',
-      severity: 'warning',
-      status: 'acknowledged',
-      message: 'Temperatura en MTR-001: 52°C (umbral: 50°C)',
-      timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000).toISOString(),
-      acknowledgedAt: new Date(Date.now() - 7 * 60 * 60 * 1000).toISOString(),
-      acknowledgedBy: 'supervisor@empresa.com',
+      ruleName: 'Demanda Alta',
+      type: 'demand' as const,
+      severity: 'medium' as const,
+      status: 'active' as const,
+      title: 'Demanda de Energía Alta',
+      message: 'Demanda actual: 950 kW (umbral: 900 kW)',
+      triggeredAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+      acknowledgedAt: null,
+      acknowledgedBy: null,
       resolvedAt: null,
       resolvedBy: null,
-      metadata: {
+      data: {
         meterId: 'MTR-001',
         location: 'Planta Principal',
-        currentValue: 52,
-        threshold: 50,
+        currentValue: 950,
+        threshold: 900,
+        unit: 'kW',
+        additionalData: {
+          peakDemand: 950,
+          capacity: 1000,
+          utilizationPercentage: 95,
+        },
       },
+      notifications: [
+        {
+          id: 'notif-5',
+          channel: 'email' as const,
+          recipient: 'supervisor@empresa.com',
+          sentAt: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
+          status: 'sent' as const,
+          retryCount: 0,
+        },
+      ],
     },
   ];
 
@@ -256,11 +383,9 @@ const AlertsManagement: React.FC = () => {
       id: 'group-1',
       name: 'Grupo Crítico',
       description: 'Alertas críticas que requieren atención inmediata',
-      rules: ['rule-2'],
-      users: ['admin@empresa.com', 'supervisor@empresa.com'],
-      meters: ['MTR-001', 'MTR-002'],
-      locations: ['Planta Principal', 'Edificio A'],
-      notificationChannels: ['email', 'sms', 'push'],
+      meterIds: ['MTR-001', 'MTR-002'],
+      locationIds: ['loc-1', 'loc-2'],
+      userIds: ['user-1', 'user-2'],
       createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
       updatedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
     },
@@ -268,11 +393,9 @@ const AlertsManagement: React.FC = () => {
       id: 'group-2',
       name: 'Grupo Monitoreo',
       description: 'Alertas de monitoreo general del sistema',
-      rules: ['rule-1', 'rule-4'],
-      users: ['tecnico@empresa.com'],
-      meters: ['MTR-001', 'MTR-003'],
-      locations: ['Planta Principal', 'Edificio B'],
-      notificationChannels: ['email'],
+      meterIds: ['MTR-001', 'MTR-003'],
+      locationIds: ['loc-1', 'loc-3'],
+      userIds: ['user-3'],
       createdAt: new Date(Date.now() - 20 * 24 * 60 * 60 * 1000).toISOString(),
       updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
     },
@@ -280,18 +403,56 @@ const AlertsManagement: React.FC = () => {
 
   const generateMockAlertSettings = () => ({
     userId: 'current-user',
-    emailNotifications: true,
-    smsNotifications: false,
-    pushNotifications: true,
-    quietHours: {
-      enabled: true,
-      start: '22:00',
-      end: '06:00',
+    globalSettings: {
+      enableEmail: true,
+      enableSMS: false,
+      enablePlatform: true,
+      quietHours: [
+        {
+          start: '22:00',
+          end: '06:00',
+          days: [0, 1, 2, 3, 4, 5, 6], // Todos los días
+        },
+      ],
+      maxAlertsPerHour: 10,
+      digestFrequency: 'daily' as const,
     },
-    alertFrequency: 'immediate',
-    digestFrequency: 'daily',
-    language: 'es',
-    timezone: 'America/Bogota',
+    channelSettings: {
+      email: {
+        enabled: true,
+        address: 'usuario@empresa.com',
+        frequency: 'immediate' as const,
+      },
+      sms: {
+        enabled: false,
+        phoneNumber: '+573001234567',
+        frequency: 'immediate' as const,
+      },
+      platform: {
+        enabled: true,
+        showInSidebar: true,
+        showAsToast: true,
+        soundEnabled: true,
+      },
+    },
+    suppressionRules: [
+      {
+        id: 'suppress-1',
+        name: 'Supresión de Pruebas',
+        conditions: [
+          {
+            id: 'test-condition',
+            metric: 'testMode',
+            operator: 'eq' as const,
+            threshold: 1,
+            unit: '',
+            duration: 0,
+          },
+        ],
+        duration: 60,
+        enabled: true,
+      },
+    ],
   });
 
   // Usar datos mock en lugar de las queries
@@ -335,7 +496,6 @@ const AlertsManagement: React.FC = () => {
       await createRule(ruleData).unwrap();
       setSnackbar({ open: true, message: 'Regla de alerta creada exitosamente' });
       setIsCreatingRule(false);
-      refetchRules();
     } catch (error) {
       setSnackbar({ open: true, message: 'Error al crear la regla de alerta' });
     }
@@ -346,7 +506,6 @@ const AlertsManagement: React.FC = () => {
       await updateRule({ id, rule: ruleData }).unwrap();
       setSnackbar({ open: true, message: 'Regla de alerta actualizada exitosamente' });
       setEditingRule(null);
-      refetchRules();
     } catch (error) {
       setSnackbar({ open: true, message: 'Error al actualizar la regla de alerta' });
     }
@@ -356,7 +515,6 @@ const AlertsManagement: React.FC = () => {
     try {
       await deleteRule(id).unwrap();
       setSnackbar({ open: true, message: 'Regla de alerta eliminada exitosamente' });
-      refetchRules();
     } catch (error) {
       setSnackbar({ open: true, message: 'Error al eliminar la regla de alerta' });
     }
@@ -366,7 +524,6 @@ const AlertsManagement: React.FC = () => {
     try {
       await acknowledgeAlert({ id, acknowledgedBy: 'current-user' }).unwrap();
       setSnackbar({ open: true, message: 'Alerta reconocida exitosamente' });
-      refetchInstances();
     } catch (error) {
       setSnackbar({ open: true, message: 'Error al reconocer la alerta' });
     }
@@ -376,7 +533,6 @@ const AlertsManagement: React.FC = () => {
     try {
       await resolveAlert({ id, resolvedBy: 'current-user' }).unwrap();
       setSnackbar({ open: true, message: 'Alerta resuelta exitosamente' });
-      refetchInstances();
     } catch (error) {
       setSnackbar({ open: true, message: 'Error al resolver la alerta' });
     }
@@ -386,7 +542,6 @@ const AlertsManagement: React.FC = () => {
     try {
       await bulkAcknowledge({ ids, acknowledgedBy: 'current-user' }).unwrap();
       setSnackbar({ open: true, message: `${ids.length} alertas reconocidas exitosamente` });
-      refetchInstances();
     } catch (error) {
       setSnackbar({ open: true, message: 'Error al reconocer las alertas' });
     }
@@ -396,7 +551,6 @@ const AlertsManagement: React.FC = () => {
     try {
       await bulkResolve({ ids, resolvedBy: 'current-user' }).unwrap();
       setSnackbar({ open: true, message: `${ids.length} alertas resueltas exitosamente` });
-      refetchInstances();
     } catch (error) {
       setSnackbar({ open: true, message: 'Error al resolver las alertas' });
     }
@@ -406,7 +560,6 @@ const AlertsManagement: React.FC = () => {
     try {
       await createGroup(groupData).unwrap();
       setSnackbar({ open: true, message: 'Grupo creado exitosamente' });
-      refetchGroups();
     } catch (error) {
       setSnackbar({ open: true, message: 'Error al crear el grupo' });
     }
@@ -416,7 +569,6 @@ const AlertsManagement: React.FC = () => {
     try {
       await updateGroup({ id, group: groupData }).unwrap();
       setSnackbar({ open: true, message: 'Grupo actualizado exitosamente' });
-      refetchGroups();
     } catch (error) {
       setSnackbar({ open: true, message: 'Error al actualizar el grupo' });
     }
@@ -426,17 +578,14 @@ const AlertsManagement: React.FC = () => {
     try {
       await deleteGroup(id).unwrap();
       setSnackbar({ open: true, message: 'Grupo eliminado exitosamente' });
-      refetchGroups();
     } catch (error) {
       setSnackbar({ open: true, message: 'Error al eliminar el grupo' });
     }
   };
 
   const handleRefresh = () => {
-    refetchRules();
-    refetchInstances();
-    refetchGroups();
-    refetchSettings();
+    // En modo mock, no hay nada que refrescar
+    setSnackbar({ open: true, message: 'Datos actualizados (modo demostración)' });
   };
 
   const handleExport = () => {
@@ -691,9 +840,23 @@ const AlertsManagement: React.FC = () => {
           {activeTab === 2 && (
             <AlertGroups
               groups={groupsData}
-              meters={['MTR-001', 'MTR-002', 'MTR-003', 'MTR-004']}
-              users={['admin@empresa.com', 'supervisor@empresa.com', 'tecnico@empresa.com']}
-              locations={['Planta Principal', 'Edificio A', 'Edificio B', 'Almacén Central']}
+              meters={[
+                { id: 'MTR-001', name: 'Medidor Principal', location: 'Planta Principal' },
+                { id: 'MTR-002', name: 'Medidor Edificio A', location: 'Edificio A' },
+                { id: 'MTR-003', name: 'Medidor Edificio B', location: 'Edificio B' },
+                { id: 'MTR-004', name: 'Medidor Almacén', location: 'Almacén Central' },
+              ]}
+              users={[
+                { id: 'user-1', name: 'Administrador', email: 'admin@empresa.com' },
+                { id: 'user-2', name: 'Supervisor', email: 'supervisor@empresa.com' },
+                { id: 'user-3', name: 'Técnico', email: 'tecnico@empresa.com' },
+              ]}
+              locations={[
+                { id: 'loc-1', name: 'Planta Principal', description: 'Planta principal de producción' },
+                { id: 'loc-2', name: 'Edificio A', description: 'Edificio administrativo A' },
+                { id: 'loc-3', name: 'Edificio B', description: 'Edificio administrativo B' },
+                { id: 'loc-4', name: 'Almacén Central', description: 'Almacén central de materiales' },
+              ]}
               onCreateGroup={handleCreateGroup}
               onUpdateGroup={handleUpdateGroup}
               onDeleteGroup={handleDeleteGroup}
