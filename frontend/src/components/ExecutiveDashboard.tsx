@@ -259,7 +259,11 @@ const ExecutiveDashboard: React.FC = () => {
   const stats = getStats();
 
   return (
-    <Box>
+    <Box sx={{ 
+      height: '100%', 
+      overflow: 'auto',
+      pb: 3 // Padding bottom para asegurar que el último contenido sea visible
+    }}>
       <Typography variant="h4" gutterBottom>
         Dashboard Ejecutivo
       </Typography>
@@ -424,11 +428,15 @@ const ExecutiveDashboard: React.FC = () => {
           )}
 
           {/* Modo de vista */}
-          <Box display="flex" gap={1} mt={2}>
+          <Box display="flex" gap={1} mt={2} alignItems="center">
+            <Typography variant="body2" color="text.secondary" sx={{ mr: 1 }}>
+              Vista:
+            </Typography>
             <Button
               startIcon={<ViewModule />}
               onClick={() => dispatch(setViewMode('grid'))}
               variant={viewMode === 'grid' ? 'contained' : 'outlined'}
+              size="small"
             >
               Cuadrícula
             </Button>
@@ -436,6 +444,7 @@ const ExecutiveDashboard: React.FC = () => {
               startIcon={<TableChart />}
               onClick={() => dispatch(setViewMode('list'))}
               variant={viewMode === 'list' ? 'contained' : 'outlined'}
+              size="small"
             >
               Lista
             </Button>
@@ -443,9 +452,15 @@ const ExecutiveDashboard: React.FC = () => {
               startIcon={<Timeline />}
               onClick={() => dispatch(setViewMode('compact'))}
               variant={viewMode === 'compact' ? 'contained' : 'outlined'}
+              size="small"
             >
               Compacto
             </Button>
+            <Typography variant="caption" color="text.secondary" sx={{ ml: 2, fontStyle: 'italic' }}>
+              {viewMode === 'grid' && 'Vista en cuadrícula - Tarjetas grandes'}
+              {viewMode === 'list' && 'Vista en lista - Información horizontal'}
+              {viewMode === 'compact' && 'Vista compacta - Tarjetas pequeñas'}
+            </Typography>
           </Box>
         </CardContent>
       </Card>
@@ -564,10 +579,28 @@ const ExecutiveDashboard: React.FC = () => {
       {/* KPIs principales */}
       <Grid container spacing={{ xs: 2, sm: 3 }} sx={{ mb: { xs: 2, sm: 3 } }}>
         {kpisData.map((kpi) => (
-          <Grid item xs={12} sm={6} md={4} lg={2} key={kpi.id}>
-            <Card sx={{ height: '100%', minHeight: { xs: 120, sm: 140 } }}>
-              <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
-                <Box display="flex" alignItems="center" justifyContent="space-between" mb={2}>
+          <Grid 
+            item 
+            xs={viewMode === 'compact' ? 12 : viewMode === 'list' ? 12 : 12} 
+            sm={viewMode === 'compact' ? 6 : viewMode === 'list' ? 12 : 6} 
+            md={viewMode === 'compact' ? 4 : viewMode === 'list' ? 12 : 4} 
+            lg={viewMode === 'compact' ? 3 : viewMode === 'list' ? 12 : 2} 
+            key={kpi.id}
+          >
+            <Card sx={{ 
+              height: '100%', 
+              minHeight: viewMode === 'compact' ? 100 : viewMode === 'list' ? 80 : 140,
+              display: viewMode === 'list' ? 'flex' : 'block',
+              flexDirection: viewMode === 'list' ? 'row' : 'column'
+            }}>
+              <CardContent sx={{ 
+                p: viewMode === 'compact' ? 1.5 : viewMode === 'list' ? 2 : { xs: 2, sm: 3 },
+                display: 'flex',
+                flexDirection: viewMode === 'list' ? 'row' : 'column',
+                alignItems: viewMode === 'list' ? 'center' : 'flex-start',
+                width: '100%'
+              }}>
+                <Box display="flex" alignItems="center" justifyContent="space-between" mb={viewMode === 'list' ? 0 : 2} sx={{ width: '100%' }}>
                   <Avatar sx={{ 
                     bgcolor: getKPIColor(kpi.id), 
                     width: { xs: 32, sm: 40 }, 
@@ -582,48 +615,67 @@ const ExecutiveDashboard: React.FC = () => {
                     sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}
                   />
                 </Box>
-                <Typography 
-                  variant="h4" 
-                  color="primary" 
-                  gutterBottom
-                  sx={{ 
-                    fontSize: { xs: '1.5rem', sm: '2rem', md: '2.125rem' },
-                    lineHeight: 1.2
-                  }}
-                >
-                  {EXECUTIVE_UTILS.formatValue(kpi.value, kpi.unit)}
-                </Typography>
-                <Typography 
-                  variant="body2" 
-                  color="text.secondary" 
-                  gutterBottom
-                  sx={{ fontSize: { xs: '0.75rem', sm: '0.875rem' } }}
-                >
-                  {kpi.title}
-                </Typography>
-                <Box display="flex" alignItems="center" gap={1} flexWrap="wrap">
+                <Box sx={{ 
+                  display: 'flex', 
+                  flexDirection: viewMode === 'list' ? 'row' : 'column',
+                  alignItems: viewMode === 'list' ? 'center' : 'flex-start',
+                  gap: viewMode === 'list' ? 2 : 0,
+                  width: '100%'
+                }}>
+                  <Typography 
+                    variant="h4" 
+                    color="primary" 
+                    gutterBottom={viewMode !== 'list'}
+                    sx={{ 
+                      fontSize: viewMode === 'compact' ? '1.2rem' : viewMode === 'list' ? '1.5rem' : { xs: '1.5rem', sm: '2rem', md: '2.125rem' },
+                      lineHeight: 1.2,
+                      minWidth: viewMode === 'list' ? '120px' : 'auto'
+                    }}
+                  >
+                    {EXECUTIVE_UTILS.formatValue(kpi.value, kpi.unit)}
+                  </Typography>
+                  <Typography 
+                    variant="body2" 
+                    color="text.secondary" 
+                    gutterBottom={viewMode !== 'list'}
+                    sx={{ 
+                      fontSize: viewMode === 'compact' ? '0.7rem' : viewMode === 'list' ? '0.875rem' : { xs: '0.75rem', sm: '0.875rem' },
+                      flex: viewMode === 'list' ? 1 : 'none'
+                    }}
+                  >
+                    {kpi.title}
+                  </Typography>
+                </Box>
+                {viewMode !== 'compact' && (
+                  <Box display="flex" alignItems="center" gap={1} flexWrap="wrap" sx={{ mt: viewMode === 'list' ? 0 : 1 }}>
+                    <Typography 
+                      variant="caption" 
+                      color="text.secondary"
+                      sx={{ fontSize: viewMode === 'list' ? '0.75rem' : { xs: '0.65rem', sm: '0.75rem' } }}
+                    >
+                      {EXECUTIVE_UTILS.formatChange(kpi.change)}
+                    </Typography>
+                    <Chip
+                      label={EXECUTIVE_UTILS.getChangeIcon(kpi.changeType)}
+                      size="small"
+                      color={EXECUTIVE_UTILS.getChangeColor(kpi.change, kpi.changeType) as any}
+                      sx={{ fontSize: viewMode === 'list' ? '0.75rem' : { xs: '0.7rem', sm: '0.75rem' } }}
+                    />
+                  </Box>
+                )}
+                {viewMode !== 'compact' && (
                   <Typography 
                     variant="caption" 
-                    color="text.secondary"
-                    sx={{ fontSize: { xs: '0.65rem', sm: '0.75rem' } }}
+                    color="text.secondary" 
+                    display="block"
+                    sx={{ 
+                      fontSize: viewMode === 'list' ? '0.75rem' : { xs: '0.65rem', sm: '0.75rem' },
+                      mt: viewMode === 'list' ? 0 : 0.5
+                    }}
                   >
-                    {EXECUTIVE_UTILS.formatChange(kpi.change)}
+                    {kpi.period}
                   </Typography>
-                  <Chip
-                    label={EXECUTIVE_UTILS.getChangeIcon(kpi.changeType)}
-                    size="small"
-                    color={EXECUTIVE_UTILS.getChangeColor(kpi.change, kpi.changeType) as any}
-                    sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}
-                  />
-                </Box>
-                <Typography 
-                  variant="caption" 
-                  color="text.secondary" 
-                  display="block"
-                  sx={{ fontSize: { xs: '0.65rem', sm: '0.75rem' } }}
-                >
-                  {kpi.period}
-                </Typography>
+                )}
               </CardContent>
             </Card>
           </Grid>
@@ -657,7 +709,10 @@ const ExecutiveDashboard: React.FC = () => {
                         color="inherit"
                         size="small"
                         onClick={() => {
-                          // Implementar acción de alerta
+                          setSnackbar({ 
+                            open: true, 
+                            message: `Ver detalles de alerta: ${alert.message}` 
+                          });
                         }}
                         sx={{ fontSize: { xs: '0.7rem', sm: '0.75rem' } }}
                       >
